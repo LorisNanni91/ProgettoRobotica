@@ -69,3 +69,7 @@ UnityProject/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 # Temporary auto-generated Android Assets
 UnityProject/[Aa]ssets/[Ss]treamingAssets/aa.meta
 UnityProject/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Custom for Python projects
+PythonProject/.idea/
+PythonProject/__pycache__/
