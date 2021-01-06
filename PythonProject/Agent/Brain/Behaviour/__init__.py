@@ -6,6 +6,6 @@ class Behaviour:
         self.__prolog = prolog
 
 
-    def takeDecision(self):
+    def takeDecision(self, factClass):
         decision = 1
         return decision

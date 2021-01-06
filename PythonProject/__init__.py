@@ -1,29 +1,51 @@
 import server as S
 import Agent
 
-cane = Agent.Agent("0,0", 3, 4)
-world = cane.useBrain().useMemory().getWorld()
-print(world)
-cane.useBrain().useMemory().insertSheepinWorld("2,1")
-print(cane.useBrain().useMemory().getWorld())
-
-
-
-
+# cane = Agent.Agent("0,0", 3, 4)
+# world = cane.useBrain().useMemory().getWorld()
+# print(world)
+# cane.useBrain().useMemory().insertSheepinWorld("2,1")
+# print(cane.useBrain().useMemory().getWorld())
+#
+# cane.useBrain().useMemory().changeMyPosition("2,2")
+# print(cane.useBrain().useMemory().getWorld())
 # i = 0
 #
-while True:
+PLANE_SIZE = 0
+DOG_POSITION = 1
+DOG_SENSOR = 2
+GOAL_REACHED = 3
 
+initialized = False
+planedimension = None
+dogposition = None
+while initialized == False:
 
-    S.sock.SendData("ciao unity")
-   # S.sock.SendData('Sent from Python: ') # Send this string to other application
-#     i += 1
-#
-    data = S.sock.ReadReceivedData() # read data
+    data = S.sock.ReadReceivedData()# read data
 
     if data != None: # if NEW data has been received since last ReadReceivedData function call
-        print(data) # print new received data
-#
-#     S.time.sleep(1)
+        array = data.split("|")
+        if array[0] == PLANE_SIZE:
+            planedimension = array[1]
+        elif array[0] == DOG_POSITION:
+            dogposition = array[1]
+            initialized = True
+
+cane = Agent.Agent(dogposition, planedimension)
+cane.useBrain().useLearning().LearnFromFile("prolog.pl")
+
+i = 0
+while i < 5:
+
+    data = S.sock.ReadReceivedData()  # read data
+    if data != None:
+        array = data.split ("|")
+        if array[0] == DOG_SENSOR:
+            string= 1
+            # dati sensore
+        elif array[0] == GOAL_REACHED:
+            i += 1
+
+
 
 
