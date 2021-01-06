@@ -72,4 +72,4 @@ UnityProject/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Custom for Python projects
 PythonProject/.idea/
-PythonProject/__pycache__/
+**/__pycache__/*
