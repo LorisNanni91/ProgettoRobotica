@@ -49,14 +49,10 @@ public class UdpSocket : MonoBehaviour
 
     protected void SendData(string message) // Use to send data to Python
     {
-        Debug.Log("stringa che arriva" + message);
         try
         {
-            Debug.Log("fatto 0 " + message);
             byte[] data = Encoding.UTF8.GetBytes(message);
-            Debug.Log("fatto 1 " + message);
             client.Send(data, data.Length, remoteEndPoint);
-            Debug.Log("fatto 2" + message);
         }
         catch (Exception err)
         {
