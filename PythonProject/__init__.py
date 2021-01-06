@@ -1,27 +1,17 @@
 import server as S
 import Agent
 
-# cane = Agent.Agent("0,0", 3, 4)
-# world = cane.useBrain().useMemory().getWorld()
-# print(world)
-# cane.useBrain().useMemory().insertSheepinWorld("2,1")
-# print(cane.useBrain().useMemory().getWorld())
-#
-# cane.useBrain().useMemory().changeMyPosition("2,2")
-# print(cane.useBrain().useMemory().getWorld())
-# i = 0
-#
 # Message type
-PLANE_SIZE = 0
-DOG_POSITION = 1
-DOG_SENSOR = 2
-GOAL_REACHED = 3
+PLANE_SIZE = '0'
+DOG_POSITION = '1'
+DOG_SENSOR = '2'
+GOAL_REACHED = '3'
 
 # Type of object detected by sensor
-EMPTY = 0
-SHEEP = 1
-OBSTACLE = 2
-GOAL = 3
+EMPTY = '0'
+SHEEP = '1'
+OBSTACLE = '2'
+GOAL = '3'
 
 initialized = False
 planedimension = None
@@ -36,8 +26,9 @@ while initialized == False:
             planedimension = array[1]
         elif array[0] == DOG_POSITION:
             dogposition = array[1]
-            initialized = True
+            #initialized = True
 
+print("dimensione piano " + planedimension + " posizione cane " + dogposition)
 cane = Agent.Agent(dogposition, planedimension)
 cane.useBrain().useLearning().LearnFromFile("prolog.pl")
 
