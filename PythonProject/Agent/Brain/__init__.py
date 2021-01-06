@@ -36,6 +36,11 @@ class Brain:
             return decision
 
     def composeFact(self, positionArray):
-        #da sviluppare 
-        fact = positionArray
+        if self.useMemory().getGoalPosition() != None:
+            fact = "perception('True',"
+        else:
+            fact = "perception('False',"
+        for i in positionArray:
+            fact = fact + ",'" + positionArray[2] + "'"
+        fact = fact + ")"
         return fact

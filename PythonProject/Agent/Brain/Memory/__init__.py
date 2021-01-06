@@ -13,6 +13,9 @@ class Memory:
     def getMyPosition(self):
         return self.__myposition
 
+    def getGoalPosition(self):
+        return self.__goalposition
+
     def setGoalPosition(self, position):
         self.__goalposition = position
         array = Memory.splitStringPosition(position)
@@ -36,10 +39,6 @@ class Memory:
 
     def getWorld(self):
         return self.__world
-
-    def insertSheepinWorld(self, position):
-        array = Memory.splitStringPosition(position)
-        self.__world[array[0]][array[1]] = "S"
 
     def changeMyPosition(self, newposition):
         array = Memory.splitStringPosition(self.__myposition)
