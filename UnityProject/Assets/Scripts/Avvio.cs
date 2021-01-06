@@ -16,10 +16,12 @@ public class Avvio : MonoBehaviour
     void Start()
     {
         Debug.Log((int)MessageType.PLANE);
-        
 
-        connection.SendData(MessageToSend(MessageType.PLANE,piano.GetComponent<BoxCollider>().size));
-        connection.SendData(MessageToSend(MessageType.DOG,cane.transform.position));
+        connection.SendMessage(MessageType.PLANE, piano.GetComponent<BoxCollider>().size);
+        connection.SendMessage(MessageType.DOG,cane.transform.position);
+
+        //connection.SendData(MessageToSend(MessageType.PLANE,piano.GetComponent<BoxCollider>().size));
+        //connection.SendData(MessageToSend(MessageType.DOG,cane.transform.position));
     }
 
     // Update is called once per frame
@@ -28,32 +30,4 @@ public class Avvio : MonoBehaviour
         
     }
 
-    private int[] coordinateSplit(Vector3 coordinate)
-    {
-        int x = (int)coordinate.x;
-        int z = (int)coordinate.z;
-        int[] intcoord = [x, z];
-        return intcoord;
-    }
-
-    private string MessageToSend(MessageType type, Vector3 coordinates)
-    {
-        string textToSend;
-        const string separetor = ",";
-        int[] intCordinate = coordinateSplit(coordinates);
-
-        textToSend = (int)type + separetor + intCordinate[0] + separetor + intCordinate[1];
-
-
-        return textToSend;
-
-    }
-}
-
-
-public enum MessageType
-{
-    PLANE,
-    DOG,
-    SENSOR
 }

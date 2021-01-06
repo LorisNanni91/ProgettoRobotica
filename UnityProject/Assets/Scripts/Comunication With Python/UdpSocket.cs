@@ -47,7 +47,7 @@ public class UdpSocket : MonoBehaviour
     //    }
     //}
 
-    public void SendData(string message) // Use to send data to Python
+    protected void SendData(string message) // Use to send data to Python
     {
         Debug.Log("stringa che arriva" + message);
         try
