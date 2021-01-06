@@ -7,5 +7,11 @@ class Behaviour:
 
 
     def takeDecision(self, factClass):
-        decision = 1
-        return decision
+        factClass = factClass.replace('"', "'")
+
+        try:
+            decisions = list(self.__prolog.query(factClass))
+        except:
+            decisions = "Error"
+
+        return decisions

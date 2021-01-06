@@ -11,10 +11,17 @@ import Agent
 # print(cane.useBrain().useMemory().getWorld())
 # i = 0
 #
+# Message type
 PLANE_SIZE = 0
 DOG_POSITION = 1
 DOG_SENSOR = 2
 GOAL_REACHED = 3
+
+# Type of object detected by sensor
+EMPTY = 0
+SHEEP = 1
+OBSTACLE = 2
+GOAL = 3
 
 initialized = False
 planedimension = None
