@@ -39,9 +39,11 @@ while i < 5:
 
     data = S.sock.ReadReceivedData()  # read data
     if data != None:
-        array = data.split ("|")
+        array = data.split("|")
         if array[0] == DOG_SENSOR:
-            string= 1
+            positionArray = cane.useBrain().useMemory().updateWorld(array[1])
+            decision = cane.useBrain().react(positionArray, "takeDecision(X)")
+            S.sock.SendData(decision)
             # dati sensore
         elif array[0] == GOAL_REACHED:
             i += 1

@@ -26,11 +26,16 @@ class Brain:
     def useBehaviour(self):
         return self.__behaviour
 
-    def react(self, fact, factClass):
-        fact = str(fact)
+    def react(self, positionArray, factClass):
+        fact = self.composeFact(positionArray)
         self.__memory.putFact(fact)
         self.__learning.LearnNewFact(fact)
         decision = self.__behaviour.takeDecision(factClass)
         if decision:
             self.__memory.putDecision(decision)
             return decision
+
+    def composeFact(self, positionArray):
+        #da sviluppare 
+        fact = positionArray
+        return fact
