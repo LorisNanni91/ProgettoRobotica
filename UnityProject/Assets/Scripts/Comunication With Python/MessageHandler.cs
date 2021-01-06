@@ -51,7 +51,8 @@ public class MessageHandler : UdpSocket
 
 public enum MessageType
 {
-    PLANE,
-    DOG,
-    SENSOR
+    PLANE_SIZE,
+    DOG_POSITION,
+    DOG_SENSOR,
+    GOAL_REACHED
 }
