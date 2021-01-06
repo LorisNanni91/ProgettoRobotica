@@ -4,21 +4,13 @@ using UnityEngine;
 using System.Text;
 using System;
 
-public class DogSensor : MonoBehaviour
+public class DogSensor : Sensor
 {
-
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("tipo di oggetto: "+ other.GetComponent<Objects>().type.ToString());
+        //Debug.Log("tipo di oggetto: "+ other.GetComponent<Objects>().type.ToString());
     }
 
 }
 
-public enum OBJECTSTYPE
-{
-    EMPTY,
-    SHEEP,
-    OBSTACLE,
-    GOAL
-}
