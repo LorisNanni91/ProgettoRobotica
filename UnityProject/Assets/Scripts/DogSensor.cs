@@ -10,7 +10,15 @@ public class DogSensor : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log(other.gameObject);
+        Debug.Log("tipo di oggetto: "+ other.GetComponent<Objects>().type.ToString());
     }
 
+}
+
+public enum OBJECTSTYPE
+{
+    EMPTY,
+    SHEEP,
+    OBSTACLE,
+    GOAL
 }
