@@ -21,12 +21,14 @@ while initialized == False:
     data = S.sock.ReadReceivedData()# read data
 
     if data != None: # if NEW data has been received since last ReadReceivedData function call
+        print(data)
         array = data.split("|")
         if array[0] == PLANE_SIZE:
             planedimension = array[1]
         elif array[0] == DOG_POSITION:
             dogposition = array[1]
-            #initialized = True
+        if planedimension != None and dogposition != None:
+            initialized = True
 
 print("dimensione piano " + planedimension + " posizione cane " + dogposition)
 cane = Agent.Agent(dogposition, planedimension)
