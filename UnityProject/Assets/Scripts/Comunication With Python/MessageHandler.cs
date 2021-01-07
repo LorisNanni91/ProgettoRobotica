@@ -9,7 +9,18 @@ public class MessageHandler : UdpSocket
 
     public void SendMessage(MessageType type, Vector3 coordinates)
     {
-        string message = MessageToSend(type, coordinates);
+        string message = MessageFormattation(type, coordinates);
+        Send(message);
+    }
+
+    public void SendMessage(MessageType type, string text)
+    {
+        string message = MessageFormattation(type, text);
+        Send(message);
+    }
+
+    private void Send(string message)
+    {
         messagesSended.Add(message);
         SendData(message);
     }
@@ -26,7 +37,17 @@ public class MessageHandler : UdpSocket
         return messagesArrived[messagesArrived.Count-1];
     }
 
-    private string MessageToSend(MessageType type, Vector3 coordinates)
+    private string MessageFormattation(MessageType type, string text)
+    {
+        string textToSend;
+
+        // TO DO 
+        textToSend = "";
+
+        return textToSend;
+    }
+
+    private string MessageFormattation(MessageType type, Vector3 coordinates)
     {
         string textToSend;
         int[] intCordinate = CoordinateSplit(coordinates);

@@ -14,7 +14,7 @@ public class Sheep : MovableObjects
 
     private void Update()
     {
-        if (sheepSensor.mustMove)
+        if (sheepSensor.MustMove())
         {
             MoveTodirection(sheepSensor.nextPosition.x,sheepSensor.nextPosition.z);
         }

@@ -4,12 +4,27 @@ using UnityEngine;
 
 public class MovableObjects : Objects
 {
+    [ContextMenuItem("Pass", "PassMyTurn")]
+
     public Sensor sensor;
+    protected bool CanMove
+    {
+        get
+        {
+            return GameManager.Turn == gameObject.GetType();
+        }
+    } 
 
     protected void MoveTodirection(float x, float z)
     {
         float y = transform.position.y;
         transform.position = new Vector3(x, y, z);
+    }
+
+ 
+    protected void PassMyTurn()
+    {
+        GameManager.GameManagerInstance.PassTurn(this);
     }
   
 }

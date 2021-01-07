@@ -1158,8 +1158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef216d26f1a481f4cbf7ddaf41b9bd64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  piano: {fileID: 1173623938}
-  cane: {fileID: 129246032}
+  plane: {fileID: 1173623943}
+  dog: {fileID: 129246036}
   connection: {fileID: 852016745}
 --- !u!4 &2113788258
 Transform:
