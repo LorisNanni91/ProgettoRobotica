@@ -44,13 +44,10 @@ while i < 5:
         if array[0] == DOG_SENSOR:
             positionArray = cane.useBrain().useMemory().updateWorld(array[1])
             decision = cane.useBrain().react(positionArray, "takeDecision(X)")
-            S.sock.SendData(decision)
+            newposition = cane.useBrain().useMemory().changeMyPosition(decision)
+            S.sock.SendData(newposition)
             # dati sensore
         elif array[0] == GOAL_REACHED:
             i += 1
         elif array[0] == GOAL_FOUND:
             cane.useBrain().useMemory().setGoalPosition(array[1])
-
-
-
-

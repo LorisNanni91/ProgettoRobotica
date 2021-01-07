@@ -20,14 +20,17 @@ class Memory:
         self.__goalposition = position
         array = Memory.splitStringPosition(position)
         self.__world[array[0]][array[1]] = 'G'
+        return
 
     def putDecision(self, decision):
         decision = str(decision)
         self.__decisions.put(decision)
+        return
 
     def putFact(self, fact):
         fact = str(fact)
         self.__decisions.put(fact)
+        return
 
     def getAllDecisions(self):
         return self.__decisions
@@ -36,16 +39,40 @@ class Memory:
         array = Memory.splitStringPosition(planedimension)
         self.__world = [[0] * array[0] for i in range(array[1])]
         self.changeMyPosition(self.__myposition)
+        return
 
     def getWorld(self):
         return self.__world
 
-    def changeMyPosition(self, newposition):
+    def changeMyPosition(self, decision):
+        newposition = self.calcolateNewPosition(decision)
         array = Memory.splitStringPosition(self.__myposition)
         self.__world[array[0]][array[1]] = "0"
-        array = Memory.splitStringPosition(newposition)
-        self.__world[array[0]][array[1]] = "A"
-        self.__myposition = newposition
+        self.__world[newposition[0]][newposition[1]] = "A"
+        self.__myposition = str(newposition)
+        return str(newposition)
+
+    def calcolateNewPosition(self, decision):
+        mypositionarray = Memory.splitStringPosition(self.__myposition)
+        #da rivedere
+        if decision == 'North':
+            mypositionarray[1] +=1
+        elif decision == 'South':
+            mypositionarray[1] +=1
+        elif decision == 'East':
+            mypositionarray[1] += 1
+        elif decision == 'West':
+            mypositionarray[1] +=1
+        elif decision == 'North-East':
+            mypositionarray[1] +=1
+        elif decision == 'North-West':
+            mypositionarray[1] +=1
+        elif decision == 'South-East':
+            mypositionarray[1] +=1
+        elif decision == 'South-West':
+            mypositionarray[1] +=1
+        return
+
 
     def updateWorld(self, arraySensor):
         cellsSensor = arraySensor.split("-")
