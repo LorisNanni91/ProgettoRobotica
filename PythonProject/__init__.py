@@ -6,6 +6,7 @@ PLANE_SIZE = '0'
 DOG_POSITION = '1'
 DOG_SENSOR = '2'
 GOAL_REACHED = '3'
+GOAL_FOUND = '4'
 
 # Type of object detected by sensor
 EMPTY = '0'
@@ -47,6 +48,8 @@ while i < 5:
             # dati sensore
         elif array[0] == GOAL_REACHED:
             i += 1
+        elif array[0] == GOAL_FOUND:
+            cane.useBrain().useMemory().setGoalPosition(array[1])
 
 
 

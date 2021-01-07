@@ -6,6 +6,8 @@ class Learning:
         self.__prolog = prolog
 
     def LearnNewFact(self, fact):
+        factClass = fact.split("(")[0] + "(_)"
+        self.Clean(factClass)
         self.__prolog.assertz(str(fact))
         return
 
@@ -14,7 +16,7 @@ class Learning:
         self.__prolog.consult(filepath)
         return
 
-    def Clean(self, fact):
-        fact = str(fact)
-        factClass = fact.split('(')[0] + '(_)'
+    def Clean(self, factClass):
+        factClass = str(factClass)
         self.__prologEngine.retractall(factClass)
+        return
