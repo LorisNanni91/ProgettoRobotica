@@ -18,17 +18,17 @@ public class GameManager : MonoBehaviour
     private Sheep sheep;
 
     public MessageHandler connection;
-    public static Type Turn
+    public static OBJECTSTYPE Turn
     {
         get
         {
-            return _turn.GetType();
+            return _turn;
         }
 
     }
 
-    private static MovableObjects _turn;
-    private MovableObjects[] turnManagement;
+    private static OBJECTSTYPE _turn;
+    private OBJECTSTYPE[] turnManagement = { OBJECTSTYPE.DOG, OBJECTSTYPE.SHEEP };
     private int CounterType
     {
         get
@@ -52,8 +52,6 @@ public class GameManager : MonoBehaviour
             sheep = FindObjectOfType<Sheep>();
         }
 
-        turnManagement = new MovableObjects[2] { dog, sheep };
-
         connection.SendMessage(MessageType.PLANE_SIZE, plane.size);
         connection.SendMessage(MessageType.DOG_POSITION, dog.transform.position);
 
@@ -68,9 +66,9 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void PassTurn(MovableObjects movableObject)
+    public void PassTurn(OBJECTSTYPE type)
     {
-        if(Turn == movableObject.GetType())
+        if(Turn == type)
         {
             CounterType++;
             _turn = turnManagement[CounterType];

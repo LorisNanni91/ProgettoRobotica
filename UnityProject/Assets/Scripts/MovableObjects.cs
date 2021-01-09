@@ -11,7 +11,7 @@ public class MovableObjects : Objects
     {
         get
         {
-            return GameManager.Turn == gameObject.GetType();
+            return GameManager.Turn == this.type;
         }
     } 
 
@@ -24,7 +24,7 @@ public class MovableObjects : Objects
  
     protected void PassMyTurn()
     {
-        GameManager.GameManagerInstance.PassTurn(this);
+        GameManager.GameManagerInstance.PassTurn(this.type);
     }
   
 }
