@@ -31,16 +31,18 @@ class Brain:
         self.__memory.putFact(fact)
         self.__learning.LearnNewFact(fact)
         decision = self.__behaviour.takeDecision(factClass)
-        if decision:
+        if decision != "Error":
             self.__memory.putDecision(decision)
             return decision
+        else:
+            return "Error"
 
     def composeFact(self, positionArray):
         if self.useMemory().getGoalPosition() != None:
-            fact = "perception('True',"
+            fact = "perception('True'"
         else:
-            fact = "perception('False',"
+            fact = "perception('False'"
         for i in positionArray:
-            fact = fact + ",'" + positionArray[2] + "'"
+            fact = fact + ",'" + positionArray[i][2] + "'"
         fact = fact + ")"
         return fact

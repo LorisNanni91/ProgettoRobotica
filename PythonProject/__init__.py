@@ -2,17 +2,17 @@ import server as S
 import Agent
 
 # Message type
-PLANE_SIZE = '0'
-DOG_POSITION = '1'
-DOG_SENSOR = '2'
-GOAL_REACHED = '3'
-GOAL_FOUND = '4'
+PLANE_SIZE = 'PLANE_SIZE'
+DOG_POSITION = 'DOG_POSITION'
+DOG_SENSOR = 'DOG_SENSOR'
+GOAL_REACHED = 'GOAL_REACHED'
+GOAL_FOUND = 'GOAL_FOUND'
 
 # Type of object detected by sensor
-EMPTY = '0'
-SHEEP = '1'
-OBSTACLE = '2'
-GOAL = '3'
+EMPTY = 'EMPTY'
+SHEEP = 'SHEEP'
+OBSTACLE = 'OBSTACLE'
+GOAL = 'GOAL'
 
 initialized = False
 planedimension = None
@@ -44,10 +44,10 @@ while i < 5:
         if array[0] == DOG_SENSOR:
             positionArray = cane.useBrain().useMemory().updateWorld(array[1])
             decision = cane.useBrain().react(positionArray, "takeDecision(X)")
-            newposition = cane.useBrain().useMemory().changeMyPosition(decision)
-            S.sock.SendData(newposition)
-            # dati sensore
+            S.sock.SendData(decision)
         elif array[0] == GOAL_REACHED:
             i += 1
         elif array[0] == GOAL_FOUND:
             cane.useBrain().useMemory().setGoalPosition(array[1])
+        elif array[0] == DOG_POSITION:
+            cane.useBrain().useMemory().changeMyPosition(array[1])
