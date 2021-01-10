@@ -6,12 +6,8 @@ public class DogSensorManager : Sensor
 {
     public DogSensor[] viewSensors;
 
-    private void Start()
-    {
-        Invoke("Test", 2f);
-    }
 
-    private string ComposeStringSensor()
+    public string GetStringSensor()
     {
         string sensorsString = MessageType.DOG_SENSOR+MessageHandler.messageTypeSeparetor;
 
@@ -25,10 +21,4 @@ public class DogSensorManager : Sensor
         return sensorsString;
     }
 
-    private void Test()
-    {
-        string test = ComposeStringSensor();
-
-        Debug.Log("TEST: " + test);
-    }
 }

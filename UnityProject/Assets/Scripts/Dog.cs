@@ -6,67 +6,105 @@ public class Dog : MovableObjects
 {
     private DogSensorManager dogSensor;
     private int movesCounter = 0;
+    private bool newIstructionArrived = false;
+    private bool waitForIstrucition = false;
+    List<string> istructions = new List<string>(); // need to be a class ?
 
     private void Start()
     {
         dogSensor = (DogSensorManager)sensor;
-        Debug.Log("DOG POSITION " + transform.position);
+
+
     }
 
-    private void ReceiveIstruction(string message)
+    private void Update()
     {
+        if(CanMove && !waitForIstrucition)
+        {
+            waitForIstrucition = true;
+            StartCoroutine(DogTurn());
+
+        }
+        
+    }
+
+    private IEnumerator DogTurn()
+    {
+        GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, transform.position);
+        GameManager.GameManagerInstance.SendSensorMessage(MessageType.DOG_SENSOR, this.dogSensor.GetStringSensor());
+
+        //yield return new WaitUntil(() => newIstructionArrived);
+
+        while(!newIstructionArrived)
+        {
+            newIstructionArrived = GameManager.GameManagerInstance.NewMessageToRead(this.istructions.Count);
+            yield return new WaitForSeconds(1f);
+        }
+
+        string istruction = GameManager.GameManagerInstance.GetDogIstructionMessage();
+
+        ExecuteIstruction(istruction);
+
+        yield return null;
+
+    }
+
+
+    private void ExecuteIstruction(string message)
+    {
+        Vector3 mypostion = transform.position;
+
         switch(message)
         {
-            case Actions.ROTATE:
+            case Actions.ROTATE_LEFT:
+                transform.Rotate(new Vector3(0,-90,0));
                 break;
-            case Actions.NORTH:
+            case Actions.ROTATE_RIGHT:
+                transform.Rotate(new Vector3(0, 90, 0));
                 break;
-            case Actions.SOUTH:
-                break;
-            case Actions.EAST:
-                break;
-            case Actions.WEST:
+            case Actions.ROTATE_BACK:
+                transform.Rotate(new Vector3(0, 180, 0));
                 break;
             case Actions.NORTH_EAST:
                 break;
             case Actions.NORTH_WEST:
                 break;
-            case Actions.SOUTH_EAST:
-                break;
-            case Actions.SOUTH_WEST:
+            case Actions.NORTH:
                 break;
 
             default:
                 Debug.LogError("DOG RECEIVED INVALID ACTION");
-
                 break;
              
         }
 
+        // reset boolean
+        waitForIstrucition = false;
+        newIstructionArrived = false;
+
+        this.movesCounter++;
+        this.PassMyTurn();
+
     }
+
+    private void RotateDog(float angle)
+    {
+        Vector3 rotation = transform.rotation.eulerAngles + Vector3.up * angle;
+        transform.Rotate(rotation);
+    }
+
 }
+
 
 public static class Actions
 {
-    public const string ROTATE = "Rotate";
-    public const string NORTH = "North";
-    public const string SOUTH = "South";
-    public const string EAST = "East";
-    public const string WEST = "West";
+    // Rotation
+    public const string ROTATE_RIGHT = "Rotate-Right";
+    public const string ROTATE_LEFT = "Rotate-Left";
+    public const string ROTATE_BACK = "Rotate-Back";
 
+    // Move
+    public const string NORTH = "North";
     public const string NORTH_EAST = "North-East";
     public const string NORTH_WEST = "North-West";
-    public const string SOUTH_EAST = "South-East";
-    public const string SOUTH_WEST = "South-West";
-
-
-    //takeDecision("Rotate") :-
-    //takeDecision("North") :-
-    //takeDecision("South") :-
-    //takeDecision("East") :-
-    //takeDecision("West") :-
-    //takeDecision("North-East") :-
-    //takeDecision("North-West") :-
-    //takeDecision("South-East") :-
-    //takeDecision("South-West") :-
 }

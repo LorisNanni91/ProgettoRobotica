@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
     BoxCollider plane;
     [SerializeField]
     Dog dog;
-
-    public MessageHandler connection;
+    [SerializeField]
+    private MessageHandler connection;
     public static OBJECTSTYPE Turn
     {
         get
@@ -72,6 +72,21 @@ public class GameManager : MonoBehaviour
     public void SendSensorMessage(MessageType messageType, string message)
     {
         connection.SendMessage(messageType, message);
+    }
+
+    public void SendPositionMessage(MessageType messageType, Vector3 position)
+    {
+        connection.SendMessage(messageType, position);
+    }
+
+    public string GetDogIstructionMessage()
+    {
+        return this.connection.GetLastArrivedMessage();
+    }
+
+    public bool NewMessageToRead(int messagesReaded)
+    {
+        return connection.NewMessageToRead(messagesReaded);
     }
 
 

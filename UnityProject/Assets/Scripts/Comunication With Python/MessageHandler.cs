@@ -70,6 +70,11 @@ public class MessageHandler : UdpSocket
         return intcoord;
     }
 
+    public bool NewMessageToRead(int messagesReaded)
+    {
+        return messagesReaded < this.messagesArrived.Count;
+    }
+
 
 }
 

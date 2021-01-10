@@ -15,10 +15,9 @@ public class MovableObjects : Objects
         }
     } 
 
-    protected void MoveTodirection(float x, float z)
+    protected void MoveTodirection(Vector3 newPosition)
     {
-        float y = transform.position.y;
-        transform.position = new Vector3(x, y, z);
+        transform.position = newPosition;
     }
 
  

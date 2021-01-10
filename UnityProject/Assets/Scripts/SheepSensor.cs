@@ -8,7 +8,6 @@ public class SheepSensor : Sensor
     public Vector3 nextPosition;
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log(gameObject.name + " -> " + other.gameObject.name);
 
         MovableObjects movableObjects = other.GetComponent<MovableObjects>();
 
@@ -19,6 +18,7 @@ public class SheepSensor : Sensor
             nextPosition = transform.position + delta;
         }
     }
+
 
     public void MoveDone()
     {
