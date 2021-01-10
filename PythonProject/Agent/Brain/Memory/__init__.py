@@ -49,29 +49,33 @@ class Memory:
         array = Memory.splitStringPosition(self.__myposition)
         self.__world[array[0]][array[1]] = "0"
         self.__world[newposition[0]][newposition[1]] = "A"
-        self.__myposition = str(newposition)
+        self.__myposition = str(newposition).replace("[", "").replace("]", "")
         return str(newposition)
 
     def calcolateNewPosition(self, decision):
         mypositionarray = Memory.splitStringPosition(self.__myposition)
         #da rivedere
         if decision == 'North':
-            mypositionarray[1] +=1
-        elif decision == 'South':
-            mypositionarray[1] +=1
-        elif decision == 'East':
             mypositionarray[1] += 1
+        elif decision == 'South':
+            mypositionarray[1] -= 1
+        elif decision == 'East':
+            mypositionarray[0] += 1
         elif decision == 'West':
-            mypositionarray[1] +=1
+            mypositionarray[0] -= 1
         elif decision == 'North-East':
-            mypositionarray[1] +=1
+            mypositionarray[1] += 1
+            mypositionarray[0] += 1
         elif decision == 'North-West':
-            mypositionarray[1] +=1
+            mypositionarray[1] += 1
+            mypositionarray[0] -= 1
         elif decision == 'South-East':
-            mypositionarray[1] +=1
+            mypositionarray[1] -= 1
+            mypositionarray[0] += 1
         elif decision == 'South-West':
-            mypositionarray[1] +=1
-        return
+            mypositionarray[1] -= 1
+            mypositionarray[0] -= 1
+        return mypositionarray
 
 
     def updateWorld(self, arraySensor):
