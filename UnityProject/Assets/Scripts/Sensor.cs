@@ -14,11 +14,23 @@ public class Sensor : MonoBehaviour
 
 }
 
-public enum OBJECTSTYPE
+public class Cell
 {
-    EMPTY,
-    SHEEP,
-    OBSTACLE,
-    GOAL,
-    DOG
+    public Vector3 myPosition;
+    public OBJECTSTYPE objectOnMyPosition;
+
+    public Cell(Vector3 position, OBJECTSTYPE objType)
+    {
+        this.myPosition = position;
+        this.objectOnMyPosition = objType;
+    }
+
+    public override string ToString()
+    {
+        string toString = this.myPosition.x + MessageHandler.messagePositionSeparetor 
+            + this.myPosition.z + MessageHandler.messagePositionSeparetor 
+            + this.objectOnMyPosition;
+
+        return toString;
+    }
 }

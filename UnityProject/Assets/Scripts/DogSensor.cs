@@ -6,10 +6,21 @@ using System;
 
 public class DogSensor : Sensor
 {
+    public Cell myCell;
 
-    private void OnTriggerStay(Collider other)
+    private void Awake()
     {
-        //Debug.Log("tipo di oggetto: "+ other.GetComponent<Objects>().type.ToString());
+        myCell = new Cell(transform.position, OBJECTSTYPE.EMPTY);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        myCell = new Cell(transform.position, other.GetComponent<Objects>().type);
+        
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        myCell = new Cell(transform.position, OBJECTSTYPE.EMPTY);
     }
 
 }

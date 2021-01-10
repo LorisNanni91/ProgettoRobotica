@@ -6,3 +6,12 @@ public class Objects : MonoBehaviour
 {
     public OBJECTSTYPE type;
 }
+
+public enum OBJECTSTYPE
+{
+    EMPTY,
+    SHEEP,
+    OBSTACLE,
+    GOAL,
+    DOG
+}

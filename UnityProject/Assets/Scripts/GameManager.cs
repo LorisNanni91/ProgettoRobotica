@@ -15,8 +15,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Dog dog;
 
-    private Sheep sheep;
-
     public MessageHandler connection;
     public static OBJECTSTYPE Turn
     {
@@ -47,10 +45,6 @@ public class GameManager : MonoBehaviour
     {
         GameManagerInstance = this;
 
-        if(this.sheep == null)
-        {
-            sheep = FindObjectOfType<Sheep>();
-        }
 
         connection.SendMessage(MessageType.PLANE_SIZE, plane.size);
         connection.SendMessage(MessageType.DOG_POSITION, dog.transform.position);
@@ -61,8 +55,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //Debug.Log("TURNO DI: " + Turn);
-        Debug.Log(turnManagement.ToString());
+
 
     }
 

@@ -90,7 +90,7 @@ public class UdpSocket : MonoBehaviour
                 IPEndPoint anyIP = new IPEndPoint(IPAddress.Any, 0);
                 byte[] data = client.Receive(ref anyIP);
                 textReceived = Encoding.UTF8.GetString(data);
-                print(">> " + textReceived);
+                //print(">> " + textReceived);
                 ProcessInput(textReceived);
             }
             catch (Exception err)

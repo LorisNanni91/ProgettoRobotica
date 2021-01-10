@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Dog : MovableObjects
 {
-    private DogSensor dogSensor;
+    private DogSensorManager dogSensor;
     private int movesCounter = 0;
 
     private void Start()
     {
-        dogSensor = (DogSensor)sensor;
+        dogSensor = (DogSensorManager)sensor;
+        Debug.Log("DOG POSITION " + transform.position);
     }
 
-    private void ReceveiveIstruction(string message)
+    private void ReceiveIstruction(string message)
     {
         switch(message)
         {
