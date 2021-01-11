@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Dog : MovableObjects
 {
+   
+
     private DogSensorManager dogSensor;
     private int movesCounter = 0;
     private bool newIstructionArrived = false;
@@ -57,19 +59,22 @@ public class Dog : MovableObjects
         switch(message)
         {
             case Actions.ROTATE_LEFT:
-                transform.Rotate(new Vector3(0,-90,0));
+                transform.Rotate(new Vector3(0,-90,0),Space.Self);
                 break;
             case Actions.ROTATE_RIGHT:
-                transform.Rotate(new Vector3(0, 90, 0));
+                transform.Rotate(new Vector3(0, 90, 0), Space.Self);
                 break;
             case Actions.ROTATE_BACK:
-                transform.Rotate(new Vector3(0, 180, 0));
+                transform.Rotate(new Vector3(0, 180, 0), Space.Self);
                 break;
             case Actions.NORTH_EAST:
+                transform.Translate(new Vector3(1,0,1), Space.Self);
                 break;
             case Actions.NORTH_WEST:
+                transform.Translate(new Vector3(-1,0,1), Space.Self);
                 break;
             case Actions.NORTH:
+                transform.Translate(Vector3.forward,Space.Self);
                 break;
 
             default:
@@ -87,11 +92,20 @@ public class Dog : MovableObjects
 
     }
 
-    private void RotateDog(float angle)
+    // ONLY TO TEST
+    [ContextMenu("TestRotation")]
+    private void TestRotation()
     {
-        Vector3 rotation = transform.rotation.eulerAngles + Vector3.up * angle;
-        transform.Rotate(rotation);
+        transform.Rotate(new Vector3(0, 90, 0), Space.Self);
     }
+
+    [ContextMenu("TestMove")]
+    private void TestMove()
+    {
+        transform.Translate(Vector3.forward, Space.Self);
+    }
+
+
 
 }
 

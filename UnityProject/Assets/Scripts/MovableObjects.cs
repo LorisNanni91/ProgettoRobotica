@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MovableObjects : Objects
 {
-    [ContextMenuItem("Pass", "PassMyTurn")]
 
     public Sensor sensor;
     protected bool CanMove
@@ -15,12 +14,8 @@ public class MovableObjects : Objects
         }
     } 
 
-    protected void MoveTodirection(Vector3 newPosition)
-    {
-        transform.position = newPosition;
-    }
 
- 
+    [ContextMenu("Pass")]
     protected void PassMyTurn()
     {
         GameManager.GameManagerInstance.PassTurn(this.type);

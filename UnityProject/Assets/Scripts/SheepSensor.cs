@@ -14,8 +14,10 @@ public class SheepSensor : Sensor
         if(movableObjects != null && movableObjects.type == OBJECTSTYPE.DOG)
         {
             mustMove = true;
+            float previousY = transform.position.y;
             Vector3 delta = transform.position - other.transform.position;
             nextPosition = transform.position + delta;
+            nextPosition.y = previousY;
         }
     }
 
