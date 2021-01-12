@@ -5,8 +5,9 @@ using UnityEngine;
 public class SheepSensor : Sensor
 {
     private bool mustMove = false;
+    private bool nextPositionEmpty = false;
     public Vector3 nextPosition;
-    private List<GameObject> obstacles = new List<GameObject>();
+    private Vector3 lastDogPosition;
     private void OnTriggerEnter(Collider other)
     {
 
@@ -15,19 +16,20 @@ public class SheepSensor : Sensor
         if(Object != null)
         {
 
-            if (Object.type == OBJECTSTYPE.OBSTACLE)
-            {
-                this.obstacles.Add(other.gameObject);
-            }
+            //if (Object.type == OBJECTSTYPE.OBSTACLE)
+            //{
+            //    this.obstacles.Add(other.gameObject);
+            //}
 
             if (Object.type == OBJECTSTYPE.DOG)
             {
+                this.lastDogPosition = other.transform.position;
                 mustMove = true;
                 float previousY = transform.position.y;
                 Vector3 delta = transform.position - other.transform.position;
                 this.nextPosition = transform.position + delta;
                 this.nextPosition.y = previousY;
-                CheckObstacles(other.transform.position,delta);
+                CheckObstacles();
             }
 
         }
@@ -35,32 +37,59 @@ public class SheepSensor : Sensor
 
     }
 
-    private void CheckObstacles(Vector3 dogPosition,Vector3 delta)
+    private void CheckObstacles()
+    {
+        bool checkObstacle = Physics.CheckBox(this.nextPosition, this.nextPosition / 2);
+
+        if(checkObstacle)
+        {
+            RecalculatePosition();
+            return;
+        }
+
+        if(checkObstacle)
+        {
+            // swap direction
+        }
+
+    }
+
+    private void RecalculatePosition()
     {
 
-        Debug.Log("Delta " + delta);
+        Rect rect = new Rect(0,0, 2, 2);
 
-        foreach(GameObject obstacle in this.obstacles)
+        rect.center = new Vector2(transform.position.x, transform.position.z);
+
+        Vector3[] anglesOfRect = new Vector3[4];
+
+        anglesOfRect[0] = new Vector3(rect.xMin,0,rect.yMin);
+        anglesOfRect[1] = new Vector3(rect.xMin,0,rect.yMax);
+        anglesOfRect[2] = new Vector3(rect.xMax,0,rect.yMin);
+        anglesOfRect[3] = new Vector3(rect.xMax,0,rect.yMax);
+
+       for(int i=0; i< anglesOfRect.Length && !this.nextPositionEmpty;i++)
         {
-            if(IgnoreYofVector(obstacle.transform.position) == IgnoreYofVector(this.nextPosition))
+            // dont work correctly, needs another method to check object at position
+            bool testObstacle = Physics.CheckBox(anglesOfRect[i], anglesOfRect[i] / 2,Quaternion.identity,LayerMask.NameToLayer("Plane"));
+
+            if(!testObstacle)
             {
-                Vector3 obstacleDelta = obstacle.transform.position - transform.position;
-
-                Debug.Log("Obstacle at " + obstacle.transform.position+" Name: "+obstacle.name+ "Obstacle delta " + obstacleDelta + "current next position "+this.nextPosition);
-
-                // calculate alternative position
-
-
-
+                this.nextPosition = new Vector3(anglesOfRect[i].x,transform.position.y,anglesOfRect[i].z);
+                //this.nextPositionEmpty = true;
             }
+
         }
+
+
 
     }
 
 
     public void MoveDone()
     {
-        mustMove = false;
+       this.mustMove = false;
+        this.nextPositionEmpty = false;
     }
 
     public bool MustMove ()
