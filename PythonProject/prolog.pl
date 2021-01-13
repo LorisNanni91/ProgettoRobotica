@@ -10,9 +10,9 @@ hasValue("Sensor 3,3",S8) :- perception(_,_,_,_,_,_,_,_,S8,_).
 hasValue("Sensor 3,3",S9) :- perception(_,_,_,_,_,_,_,_,_,S9).
 
 
-takeDecision("Rotate-Right") :- .
-takeDecision("Rotate-Left"):-
-takeDecision("Rotate-Back"):-
+takeDecision("Rotate-Right") :- hasValue("Sensor 1,3","0").
+takeDecision("Rotate-Left"):- hasValue("Sensor 1,3","0").
+takeDecision("Rotate-Back"):- hasValue("Sensor 1,3","0").
 takeDecision("North") :- hasValue("Sensor 1,2","0"), hasValue("Sensor 2,2","S"), hasValue("Goal","True").
 takeDecision("North-East") :- hasValue("Sensor 1,3","0").
 takeDecision("North-West") :- hasValue("Sensor 1,1","0").

@@ -43,9 +43,7 @@ public class MessageHandler : UdpSocket
     private string MessageFormattation(MessageType type, string text)
     {
         string textToSend;
-
-        // TO DO 
-        textToSend = "";
+        textToSend = type+MessageHandler.messageTypeSeparetor+text;
 
         return textToSend;
     }
@@ -55,7 +53,7 @@ public class MessageHandler : UdpSocket
         string textToSend;
         int[] intCordinate = CoordinateSplit(coordinates);
 
-        textToSend = (int)type + "|" + intCordinate[0] + "," + intCordinate[1];
+        textToSend = type.ToString() + "|" + intCordinate[0] + "," + intCordinate[1];
 
         return textToSend;
 

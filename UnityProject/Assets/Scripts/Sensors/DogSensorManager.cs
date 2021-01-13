@@ -9,13 +9,14 @@ public class DogSensorManager : Sensor
 
     public string GetStringSensor()
     {
-        string sensorsString = MessageType.DOG_SENSOR+MessageHandler.messageTypeSeparetor;
+        string sensorsString = "";
 
         foreach(DogSensor dogSensor in viewSensors)
         {
             sensorsString += dogSensor.myCell.ToString()+MessageHandler.messageVectorSeparetor;
         }
 
+        // to remove last separetor
         sensorsString = sensorsString.Remove(sensorsString.Length-1);
 
         return sensorsString;

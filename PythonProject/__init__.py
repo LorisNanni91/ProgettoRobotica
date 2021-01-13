@@ -12,6 +12,7 @@ GOAL_FOUND = 'GOAL_FOUND'
 EMPTY = 'EMPTY'
 SHEEP = 'SHEEP'
 OBSTACLE = 'OBSTACLE'
+WALL = 'WALL'
 GOAL = 'GOAL'
 
 initialized = False
@@ -40,10 +41,12 @@ while i < 5:
 
     data = S.sock.ReadReceivedData()  # read data
     if data != None:
+        print(data)
         array = data.split("|")
         if array[0] == DOG_SENSOR:
             positionArray = cane.useBrain().useMemory().updateWorld(array[1])
             decision = cane.useBrain().react(positionArray, "takeDecision(X)")
+            print("DECISION: " + decision)
             S.sock.SendData(decision)
         elif array[0] == GOAL_REACHED:
             i += 1
