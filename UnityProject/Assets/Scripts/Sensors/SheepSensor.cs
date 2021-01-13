@@ -7,29 +7,29 @@ public class SheepSensor : Sensor
     private bool mustMove = false;
     private bool nextPositionEmpty = false;
     public Vector3 nextPosition;
-    private Vector3 lastDogPosition;
+
+    private List<Objects> obstacles = new List<Objects>();
+    private bool NearWall
+    {
+        get
+        {
+            return this.obstacles.Exists(x=>x.type==OBJECTSTYPE.WALL);
+        }
+    }
+
+    #region UnityMethod
     private void OnTriggerEnter(Collider other)
     {
 
-        Objects Object = other.GetComponent<Objects>();
+        Objects obstalce = other.GetComponent<Objects>();
 
-        if(Object != null)
+        if(obstalce != null)
         {
+            this.obstacles.Add(obstalce);
 
-            //if (Object.type == OBJECTSTYPE.OBSTACLE)
-            //{
-            //    this.obstacles.Add(other.gameObject);
-            //}
-
-            if (Object.type == OBJECTSTYPE.DOG)
+            if (obstalce.type == OBJECTSTYPE.DOG)
             {
-                this.lastDogPosition = other.transform.position;
-                mustMove = true;
-                float previousY = transform.position.y;
-                Vector3 delta = transform.position - other.transform.position;
-                this.nextPosition = transform.position + delta;
-                this.nextPosition.y = previousY;
-                CheckObstacles();
+                RunAwayFromDog(obstalce);
             }
 
         }
@@ -37,51 +37,65 @@ public class SheepSensor : Sensor
 
     }
 
-    private void CheckObstacles()
+    private void OnTriggerExit(Collider other)
     {
-        bool checkObstacle = Physics.CheckBox(this.nextPosition, this.nextPosition / 2);
+        Objects obstacle = other.GetComponent<Objects>();
+        this.obstacles.Remove(obstacle);
+    }
 
-        if(checkObstacle)
-        {
-            RecalculatePosition();
-            return;
-        }
+    #endregion
 
-        if(checkObstacle)
-        {
-            // swap direction
-        }
-
+    private void RunAwayFromDog(Objects dog)
+    {
+        mustMove = true;
+        float previousY = transform.position.y;
+        Vector3 delta = transform.position - dog.transform.position;
+        this.nextPosition = transform.position + delta;
+        this.nextPosition.y = previousY;
+        RecalculatePosition();
     }
 
     private void RecalculatePosition()
     {
-
-        Rect rect = new Rect(0,0, 2, 2);
-
-        rect.center = new Vector2(transform.position.x, transform.position.z);
-
-        Vector3[] anglesOfRect = new Vector3[4];
-
-        anglesOfRect[0] = new Vector3(rect.xMin,0,rect.yMin);
-        anglesOfRect[1] = new Vector3(rect.xMin,0,rect.yMax);
-        anglesOfRect[2] = new Vector3(rect.xMax,0,rect.yMin);
-        anglesOfRect[3] = new Vector3(rect.xMax,0,rect.yMax);
-
-       for(int i=0; i< anglesOfRect.Length && !this.nextPositionEmpty;i++)
+        if(this.NearWall)
         {
-            // dont work correctly, needs another method to check object at position
-            bool testObstacle = Physics.CheckBox(anglesOfRect[i], anglesOfRect[i] / 2,Quaternion.identity,LayerMask.NameToLayer("Plane"));
+            // Make like billiards
+            Rect rect = new Rect(0, 0, 2, 2);
 
-            if(!testObstacle)
+            rect.center = new Vector2(transform.position.x, transform.position.z);
+
+            Vector3[] anglesOfRect = new Vector3[4];
+
+            anglesOfRect[0] = new Vector3(rect.xMin, 0, rect.yMin);
+            anglesOfRect[1] = new Vector3(rect.xMin, 0, rect.yMax);
+            anglesOfRect[2] = new Vector3(rect.xMax, 0, rect.yMin);
+            anglesOfRect[3] = new Vector3(rect.xMax, 0, rect.yMax);
+
+            for (int i = 0; i < anglesOfRect.Length && !this.nextPositionEmpty; i++)
             {
-                this.nextPosition = new Vector3(anglesOfRect[i].x,transform.position.y,anglesOfRect[i].z);
-                //this.nextPositionEmpty = true;
+                 bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == anglesOfRect[i]);
+
+                if(!isInList)
+                {
+                    float previousY = transform.position.y;
+                    this.nextPosition = anglesOfRect[i];
+                    this.nextPosition.y = previousY;
+                    return;
+                }
+
             }
+
+        }
+        else
+        {
 
         }
 
 
+    }
+
+    private void CalculateNextPosition()
+    {
 
     }
 

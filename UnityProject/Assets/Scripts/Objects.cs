@@ -13,5 +13,6 @@ public enum OBJECTSTYPE
     SHEEP,
     OBSTACLE,
     GOAL,
-    DOG
+    DOG,
+    WALL
 }
