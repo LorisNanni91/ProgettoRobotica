@@ -45,8 +45,9 @@ public class GameManager : MonoBehaviour
     {
         GameManagerInstance = this;
 
-
+        Debug.Log("sono qui");
         connection.SendMessage(MessageType.PLANE_SIZE, plane.size);
+        Debug.Log("Mandato dimensione piano");
         connection.SendMessage(MessageType.DOG_POSITION, dog.transform.position);
 
         // Initial turn is for the dog

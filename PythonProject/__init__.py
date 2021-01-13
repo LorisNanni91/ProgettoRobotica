@@ -23,7 +23,7 @@ while initialized == False:
     data = S.sock.ReadReceivedData()# read data
 
     if data != None: # if NEW data has been received since last ReadReceivedData function call
-        print(data)
+        print( "primo ciclo " + data)
         array = data.split("|")
         if array[0] == PLANE_SIZE:
             planedimension = array[1]

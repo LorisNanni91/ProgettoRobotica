@@ -42,7 +42,7 @@ class Brain:
             fact = "perception('True'"
         else:
             fact = "perception('False'"
-        for i in positionArray:
+        for i in range(len(positionArray)):
             fact = fact + ",'" + positionArray[i][2] + "'"
         fact = fact + ")"
         return fact
