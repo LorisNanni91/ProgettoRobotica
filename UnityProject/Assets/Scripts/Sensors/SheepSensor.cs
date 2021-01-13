@@ -5,7 +5,6 @@ using UnityEngine;
 public class SheepSensor : Sensor
 {
     private bool mustMove = false;
-    private bool nextPositionEmpty = false;
     public Vector3 nextPosition;
 
     private List<Objects> obstacles = new List<Objects>();
@@ -18,14 +17,39 @@ public class SheepSensor : Sensor
     }
 
     #region UnityMethod
+    /*
     private void OnTriggerEnter(Collider other)
     {
 
         Objects obstalce = other.GetComponent<Objects>();
 
-        if(obstalce != null)
+        if (obstalce != null)
         {
             this.obstacles.Add(obstalce);
+
+            if (obstalce.type == OBJECTSTYPE.DOG)
+            {
+                RunAwayFromDog(obstalce);
+            }
+
+        }
+
+
+    }
+    */
+
+    private void OnTriggerStay(Collider other)
+    {
+
+        Objects obstalce = other.GetComponent<Objects>();
+
+        if (obstalce != null)
+        {
+            if(!this.obstacles.Contains(obstalce))
+            {
+                this.obstacles.Add(obstalce);
+            }
+
 
             if (obstalce.type == OBJECTSTYPE.DOG)
             {
@@ -48,14 +72,13 @@ public class SheepSensor : Sensor
     private void RunAwayFromDog(Objects dog)
     {
         mustMove = true;
-        float previousY = transform.position.y;
         Vector3 delta = transform.position - dog.transform.position;
-        this.nextPosition = transform.position + delta;
-        this.nextPosition.y = previousY;
-        RecalculatePosition();
+
+        SetNextPosition(transform.position + delta);
+        CheckObstacles();
     }
 
-    private void RecalculatePosition()
+    private void CheckObstacles()
     {
         if(this.NearWall)
         {
@@ -71,39 +94,46 @@ public class SheepSensor : Sensor
             anglesOfRect[2] = new Vector3(rect.xMax, 0, rect.yMin);
             anglesOfRect[3] = new Vector3(rect.xMax, 0, rect.yMax);
 
-            for (int i = 0; i < anglesOfRect.Length && !this.nextPositionEmpty; i++)
+            for (int i = 0; i < anglesOfRect.Length; i++)
             {
                  bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == anglesOfRect[i]);
 
                 if(!isInList)
                 {
-                    float previousY = transform.position.y;
-                    this.nextPosition = anglesOfRect[i];
-                    this.nextPosition.y = previousY;
+                    SetNextPosition(anglesOfRect[i]);
                     return;
                 }
 
             }
 
+            // all points are full, do something else
+
         }
         else
         {
+            bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == this.IgnoreYofVector(this.nextPosition));
+
+            if(isInList)
+            {
+
+            }
 
         }
 
 
     }
 
-    private void CalculateNextPosition()
+    private void SetNextPosition(Vector3 nextPosition)
     {
-
+        float previousY = transform.parent.position.y;
+        this.nextPosition = nextPosition;
+        this.nextPosition.y = previousY;
     }
 
 
     public void MoveDone()
     {
        this.mustMove = false;
-        this.nextPositionEmpty = false;
     }
 
     public bool MustMove ()
