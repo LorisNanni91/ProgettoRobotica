@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SheepSensor : Sensor
 {
     private bool mustMove = false;
+    private bool nextPositionCalculated = false;
     public Vector3 nextPosition;
 
     private List<Objects> obstacles = new List<Objects>();
@@ -48,10 +50,12 @@ public class SheepSensor : Sensor
             if(!this.obstacles.Contains(obstalce))
             {
                 this.obstacles.Add(obstalce);
+                // need to recalculate next position
+                this.nextPositionCalculated = false;
             }
 
 
-            if (obstalce.type == OBJECTSTYPE.DOG)
+            if (obstalce.type == OBJECTSTYPE.DOG && !this.nextPositionCalculated)
             {
                 RunAwayFromDog(obstalce);
             }
@@ -75,65 +79,113 @@ public class SheepSensor : Sensor
         Vector3 delta = transform.position - dog.transform.position;
 
         SetNextPosition(transform.position + delta);
-        CheckObstacles();
+        CheckObstacles(dog.transform.position);
     }
 
-    private void CheckObstacles()
+    private void CheckObstacles(Vector3 dogPosition)
     {
-        if(this.NearWall)
+
+        Rect rect = new Rect(0, 0, 2, 2);
+
+        rect.center = new Vector2(transform.position.x, transform.position.z);
+
+        Vector3[] cornerOfRect = new Vector3[4];
+
+        cornerOfRect[0] = new Vector3(rect.xMin, 0, rect.yMin); // top-left corner
+        cornerOfRect[1] = new Vector3(rect.xMin, 0, rect.yMax); // top-right corner
+        cornerOfRect[2] = new Vector3(rect.xMax, 0, rect.yMin); // bottom-left corner
+        cornerOfRect[3] = new Vector3(rect.xMax, 0, rect.yMax); // bottom-right corner
+
+
+        if (this.NearWall)
         {
             // Make like billiards
-            Rect rect = new Rect(0, 0, 2, 2);
 
-            rect.center = new Vector2(transform.position.x, transform.position.z);
 
-            Vector3[] anglesOfRect = new Vector3[4];
-
-            anglesOfRect[0] = new Vector3(rect.xMin, 0, rect.yMin);
-            anglesOfRect[1] = new Vector3(rect.xMin, 0, rect.yMax);
-            anglesOfRect[2] = new Vector3(rect.xMax, 0, rect.yMin);
-            anglesOfRect[3] = new Vector3(rect.xMax, 0, rect.yMax);
-
-            for (int i = 0; i < anglesOfRect.Length; i++)
+            foreach(Vector3 corner in cornerOfRect)
             {
-                 bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == anglesOfRect[i]);
+                 bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == corner);
 
                 if(!isInList)
                 {
-                    SetNextPosition(anglesOfRect[i]);
+                    SetNextPosition(corner);
+                    this.nextPositionCalculated = true;
                     return;
                 }
 
             }
 
-            // all points are full, do something else
-
         }
-        else
-        {
-            bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == this.IgnoreYofVector(this.nextPosition));
 
-            if(isInList)
+        // all corner are full, check the further position from the dog
+
+        Vector3[] rectMiddlePoints = new Vector3[4];
+
+        rectMiddlePoints[0] = new Vector3(rect.xMin+1, 0, rect.yMin); // top-mid corner
+        rectMiddlePoints[1] = new Vector3(rect.xMin, 0, rect.yMin+1); // left-mid corner
+        rectMiddlePoints[2] = new Vector3(rect.xMax, 0, rect.yMin+1); // right-mid corner
+        rectMiddlePoints[3] = new Vector3(rect.xMin+1, 0, rect.yMax); // bottom-mid corner
+
+
+        Dictionary<Vector3, float> allRectPoints = new Dictionary<Vector3, float>();
+
+        foreach(Vector3 rectValidPosition in cornerOfRect)
+        {
+            bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == rectValidPosition);
+
+            if (!isInList)
             {
+                float distance = Vector3.Distance(this.IgnoreYofVector(dogPosition), rectValidPosition);
+                allRectPoints.Add(rectValidPosition,distance);
 
             }
 
         }
+
+
+        foreach (Vector3 rectValidPosition in rectMiddlePoints)
+        {
+            bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == rectValidPosition);
+
+            if (!isInList)
+            {
+                float distance = Vector3.Distance(this.IgnoreYofVector(dogPosition), rectValidPosition);
+                allRectPoints.Add(rectValidPosition, distance);
+            }
+
+        }
+
+        // we take the first further position from the dog
+        Vector3 nextPositionRecalculated = allRectPoints.OrderByDescending(x => x.Value).First().Key;
+
+        this.SetNextPosition(nextPositionRecalculated);
+        this.nextPositionCalculated = true;
+
+
 
 
     }
 
     private void SetNextPosition(Vector3 nextPosition)
     {
-        float previousY = transform.parent.position.y;
-        this.nextPosition = nextPosition;
-        this.nextPosition.y = previousY;
+        if(nextPosition!=null)
+        {
+            float previousY = transform.parent.position.y;
+            this.nextPosition = nextPosition;
+            this.nextPosition.y = previousY;
+        }
+        else
+        {
+            // don't move
+            this.nextPosition = transform.parent.position;
+        }
     }
 
 
     public void MoveDone()
     {
        this.mustMove = false;
+       this.nextPositionCalculated = false;
     }
 
     public bool MustMove ()
@@ -145,6 +197,5 @@ public class SheepSensor : Sensor
     {
         return Vector3.Scale(a,new Vector3(1,0,1));
     }
-
 
 }
