@@ -117,7 +117,7 @@ public class SheepSensor : Sensor
 
         }
 
-        // all corner are full, check the further position from the dog
+        // all corner are full, check the further empty position from the dog
 
         Vector3[] rectMiddlePoints = new Vector3[4];
 
@@ -155,7 +155,7 @@ public class SheepSensor : Sensor
 
         }
 
-        // we take the first further position from the dog
+        // we take the first further empty position from the dog
         Vector3 nextPositionRecalculated = allRectPoints.OrderByDescending(x => x.Value).First().Key;
 
         this.SetNextPosition(nextPositionRecalculated);
