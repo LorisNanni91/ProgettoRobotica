@@ -8,6 +8,8 @@ class Memory:
     __planedim = None
 
     def __init__(self, myposition, planedimension):
+        self.__decisions = []
+        self.__facts = []
         self.__myposition = myposition
         self.createWorld(planedimension)
 
@@ -23,12 +25,12 @@ class Memory:
 
     def putDecision(self, decision):
         decision = str(decision)
-        self.__decisions.put(decision)
+        self.__decisions.append(decision)
         return
 
     def putFact(self, fact):
         fact = str(fact)
-        self.__decisions.put(fact)
+        self.__decisions.append(fact)
         return
 
     def getAllDecisions(self):
@@ -52,14 +54,14 @@ class Memory:
 
     def updateWorld(self, arraySensor):
         cellsSensor = arraySensor.split("-")
-        positionarray = None
+        positionarray = []
 
-        for i in cellsSensor:
+        for i in range(len(cellsSensor)-1):
             singlePosition = cellsSensor[i].split(",")
-            if ( singlePosition[0] < 0 or singlePosition[1] < 0 or singlePosition[0] > self.__planedim[0] - 1 or singlePosition[1] > self.__planedim[1] - 1):
+            if ( int(singlePosition[0]) < 0 or int(singlePosition[1]) < 0 or int(singlePosition[0]) > self.__planedim[0] - 1 or int(singlePosition[1]) > self.__planedim[1] - 1):
                 continue
-            self.__world[singlePosition[0]][singlePosition[1]] = singlePosition[2]
-            positionarray[i] = singlePosition
+            self.__world[int(singlePosition[0])][int(singlePosition[1])] = singlePosition[2]
+            positionarray.append(singlePosition)
 
         return positionarray
 
