@@ -28,11 +28,19 @@ public class MessageHandler : UdpSocket
         SendData(message);
     }
 
-    protected override void ReceiveData()
+    //protected override void ReceiveData()
+    //{
+    //    base.ReceiveData();
+    //    messagesArrived.Add(this.textReceived);
+
+    //    Debug.Log("Message arrived " + this.textReceived);
+
+    //}
+
+    protected override void SaveLastMessage(string message)
     {
-        base.ReceiveData();
         messagesArrived.Add(this.textReceived);
-       
+        Debug.Log("Message arrived " + this.textReceived);
     }
 
     public string GetLastArrivedMessage()

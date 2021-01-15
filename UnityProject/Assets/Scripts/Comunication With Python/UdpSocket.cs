@@ -90,7 +90,8 @@ public class UdpSocket : MonoBehaviour
                 IPEndPoint anyIP = new IPEndPoint(IPAddress.Any, 0);
                 byte[] data = client.Receive(ref anyIP);
                 textReceived = Encoding.UTF8.GetString(data);
-                //print(">> " + textReceived);
+                print(">> " + textReceived);
+                SaveLastMessage(textReceived);
                 ProcessInput(textReceived);
             }
             catch (Exception err)
@@ -117,6 +118,11 @@ public class UdpSocket : MonoBehaviour
             receiveThread.Abort();
 
         client.Close();
+    }
+
+    protected virtual void SaveLastMessage(string message)
+    {
+
     }
 
 }
