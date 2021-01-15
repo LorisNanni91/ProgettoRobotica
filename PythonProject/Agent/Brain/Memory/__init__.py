@@ -56,7 +56,7 @@ class Memory:
         cellsSensor = arraySensor.split("-")
         positionarray = []
 
-        for i in range(len(cellsSensor)-1):
+        for i in range(len(cellsSensor)):
             singlePosition = cellsSensor[i].split(",")
             if ( int(singlePosition[0]) < 0 or int(singlePosition[1]) < 0 or int(singlePosition[0]) > self.__planedim[0] - 1 or int(singlePosition[1]) > self.__planedim[1] - 1):
                 continue

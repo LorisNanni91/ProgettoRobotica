@@ -8,7 +8,6 @@ class Learning:
     def LearnNewFact(self, fact):
         factClass = fact.split("(")[0] + "(_)"
         self.Clean(factClass)
-        fact = fact.replace("'", '"')
         self.__prolog.assertz(str(fact))
         return
 

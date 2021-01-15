@@ -14,4 +14,9 @@ class Behaviour:
         except:
             decisions = "Error"
 
-        return decisions
+        decisionarray = []
+        for i in range(len(decisions)):
+            decision = decisions[i]['X']
+            decisionarray.append(decision)
+
+        return decisionarray
