@@ -47,7 +47,7 @@ public class SheepSensor : Sensor
 
         if (obstalce != null)
         {
-            if(!this.obstacles.Contains(obstalce))
+            if(!this.obstacles.Contains(obstalce) && obstalce.type != OBJECTSTYPE.GOAL)
             {
                 this.obstacles.Add(obstalce);
                 // need to recalculate next position

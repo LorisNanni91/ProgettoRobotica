@@ -96,6 +96,7 @@ public class Dog : MovableObjects
         newIstructionArrived = false;
 
         this.movesCounter++;
+        Debug.Log("MOVE N# "+this.movesCounter);
         this.PassMyTurn();
 
     }

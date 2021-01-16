@@ -6,7 +6,7 @@ public class MessageHandler : UdpSocket
 {
     public const string messageTypeSeparetor = "|";
     public const string messagePositionSeparetor = ",";
-    public const string messageVectorSeparetor = "-";
+    public const string messageVectorSeparetor = ":";
     List<string> messagesArrived = new List<string>();
     List<string> messagesSended = new List<string>();
 
