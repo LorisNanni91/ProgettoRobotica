@@ -47,6 +47,7 @@ public class Sheep : MovableObjects
 
         if(goal!=null && goal.type == OBJECTSTYPE.GOAL)
         {
+            GameManager.GameManagerInstance.SendSensorMessage(MessageType.GOAL_REACHED,"una pecora in meno");
             this.gameObject.SetActive(false);
         }
 

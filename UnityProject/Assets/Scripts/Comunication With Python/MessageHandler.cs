@@ -89,5 +89,6 @@ public enum MessageType
     PLANE_SIZE,
     DOG_POSITION,
     DOG_SENSOR,
+    GOAL_FOUND,
     GOAL_REACHED
 }

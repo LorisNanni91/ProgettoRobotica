@@ -16,6 +16,11 @@ public class DogSensor : Sensor
     private void OnTriggerEnter(Collider other)
     {
         myCell = new Cell(transform.position, other.GetComponent<Objects>().type);
+
+        if(other.GetComponent<Objects>().type == OBJECTSTYPE.GOAL)
+        {
+            GameManager.GameManagerInstance.SendPositionMessage(MessageType.GOAL_FOUND, other.transform.position);
+        }
         
     }
     private void OnTriggerExit(Collider other)
