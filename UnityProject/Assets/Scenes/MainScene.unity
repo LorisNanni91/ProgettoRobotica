@@ -3342,6 +3342,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c20f92420c08147af0be0e7df3bdf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1241688117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1241688118}
+  - component: {fileID: 1241688120}
+  - component: {fileID: 1241688119}
+  m_Layer: 10
+  m_Name: Sensor Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1241688118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241688117}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 0, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1761878308}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1241688119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241688117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9c20f92420c08147af0be0e7df3bdf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1241688120
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241688117}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 0.8, z: 0.8}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1279484718
 GameObject:
   m_ObjectHideFlags: 0
@@ -4279,6 +4336,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c20f92420c08147af0be0e7df3bdf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1609568812
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1609568813}
+  - component: {fileID: 1609568815}
+  - component: {fileID: 1609568814}
+  m_Layer: 10
+  m_Name: Sensor Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1609568813
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609568812}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1, y: 0, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1761878308}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1609568814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609568812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9c20f92420c08147af0be0e7df3bdf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1609568815
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609568812}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 0.8, z: 0.8}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1634798813
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4541,6 +4655,8 @@ Transform:
   - {fileID: 1579671176}
   - {fileID: 235736217}
   - {fileID: 1279484719}
+  - {fileID: 1609568813}
+  - {fileID: 1241688118}
   m_Father: {fileID: 129246033}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4566,6 +4682,8 @@ MonoBehaviour:
   - {fileID: 1579671178}
   - {fileID: 235736219}
   - {fileID: 1279484721}
+  - {fileID: 1609568814}
+  - {fileID: 1241688119}
 --- !u!1001 &1875439035
 PrefabInstance:
   m_ObjectHideFlags: 0
