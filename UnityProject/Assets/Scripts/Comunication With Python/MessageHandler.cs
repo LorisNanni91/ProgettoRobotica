@@ -40,7 +40,7 @@ public class MessageHandler : UdpSocket
     protected override void SaveLastMessage(string message)
     {
         messagesArrived.Add(this.textReceived);
-        Debug.Log("Message arrived " + this.textReceived);
+        //Debug.Log("Message arrived " + this.textReceived);
     }
 
     public string GetLastArrivedMessage()

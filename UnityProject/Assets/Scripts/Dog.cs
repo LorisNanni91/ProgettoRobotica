@@ -32,16 +32,18 @@ public class Dog : MovableObjects
     private IEnumerator DogTurn()
     {
 
-        Debug.Log("Start coroutine dog, waiting " + waitForIstrucition);
+        //Debug.Log("Start coroutine dog, waiting " + waitForIstrucition);
 
         GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, transform.position);
         GameManager.GameManagerInstance.SendSensorMessage(MessageType.DOG_SENSOR, this.dogSensor.GetStringSensor());
+
+        Debug.Log("DOG SENSOR: " + this.dogSensor.GetStringSensor());
 
         //yield return new WaitUntil(() => newIstructionArrived);
 
         while(!newIstructionArrived)
         {
-            Debug.Log("dog waiting " + newIstructionArrived);
+            //Debug.Log("dog waiting " + newIstructionArrived);
 
             newIstructionArrived = GameManager.GameManagerInstance.NewMessageToRead(this.istructions.Count);
             yield return new WaitForSeconds(1f);
@@ -60,7 +62,7 @@ public class Dog : MovableObjects
     private void ExecuteIstruction(string message)
     {
 
-        Debug.Log("Execute: " + message);
+        //Debug.Log("Execute: " + message);
 
         Vector3 mypostion = transform.position;
 
@@ -102,7 +104,7 @@ public class Dog : MovableObjects
         newIstructionArrived = false;
 
         this.movesCounter++;
-        Debug.Log("MOVE N# "+this.movesCounter);
+        Debug.Log("MOVE N# "+this.movesCounter+": "+message);
         this.PassMyTurn();
 
     }

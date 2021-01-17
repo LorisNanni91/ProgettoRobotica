@@ -43,4 +43,5 @@ class Brain:
             fact = fact + "'" + positionArray[i][2] + "',"
         fact = fact[:-1]
         fact = fact + ")"
+        print("fact: " + fact)
         return fact
