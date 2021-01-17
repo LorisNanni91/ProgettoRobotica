@@ -63,8 +63,6 @@ class Memory:
                 continue
             self.__world[int(singlePosition[0])][int(singlePosition[1])] = singlePosition[2]
 
-        print(self.__world)
-
         return positionarray
 
 

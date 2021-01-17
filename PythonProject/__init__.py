@@ -36,7 +36,7 @@ while i < 5:
 
     data = S.sock.ReadReceivedData()  # read data
     if data != None:
-        print(data)
+        print(data + '\n')
         array = data.split("|")
         if array[0] == DOG_SENSOR:
             positionArray = cane.useBrain().useMemory().updateWorld(array[1])

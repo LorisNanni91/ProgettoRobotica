@@ -6,7 +6,7 @@ class Learning:
         self.__prolog = prolog
 
     def LearnNewFact(self, fact):
-        factClass = fact.split("(")[0] + "(_)"
+        factClass = fact.split("(")[0] + "(_,_,_,_,_,_,_,_,_,_,_)"
         self.Clean(factClass)
         self.__prolog.assertz(str(fact))
         return
