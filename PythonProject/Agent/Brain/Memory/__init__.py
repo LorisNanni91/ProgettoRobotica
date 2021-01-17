@@ -48,6 +48,7 @@ class Memory:
 
     def changeMyPosition(self, newposition):
         array = Memory.splitStringPosition(self.__myposition)
+        self.__myposition = newposition
         arraynewposition = Memory.splitStringPosition(newposition)
         self.__world[array[0]][array[1]] = "0"
         self.__world[arraynewposition[0]][arraynewposition[1]] = "A"
@@ -63,6 +64,7 @@ class Memory:
                 continue
             self.__world[int(singlePosition[0])][int(singlePosition[1])] = singlePosition[2]
 
+        print( self.__world)
         return positionarray
 
 
