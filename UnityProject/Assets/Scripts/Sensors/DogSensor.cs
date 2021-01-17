@@ -7,13 +7,14 @@ using System;
 public class DogSensor : Sensor
 {
     public Cell myCell;
+    //private bool collision = false;
 
     private void Awake()
     {
         myCell = new Cell(transform.position, OBJECTSTYPE.EMPTY);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         myCell = new Cell(transform.position, other.GetComponent<Objects>().type);
 
@@ -21,12 +22,23 @@ public class DogSensor : Sensor
         {
             GameManager.GameManagerInstance.SendPositionMessage(MessageType.GOAL_FOUND, other.transform.position);
         }
-        
+
+        //collision = true;
+
     }
     private void OnTriggerExit(Collider other)
     {
         myCell = new Cell(transform.position, OBJECTSTYPE.EMPTY);
+        //collision = false;
+
     }
+
+    public void OnMove()
+    {
+        myCell = new Cell(transform.position, OBJECTSTYPE.EMPTY);
+
+    }
+
 
 }
 

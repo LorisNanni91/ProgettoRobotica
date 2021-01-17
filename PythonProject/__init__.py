@@ -12,6 +12,8 @@ initialized = False
 planedimension = None
 dogposition = None
 
+moveCounter = 0
+
 while initialized == False:
 
     data = S.sock.ReadReceivedData()# read data
@@ -36,12 +38,13 @@ while i < 5:
 
     data = S.sock.ReadReceivedData()  # read data
     if data != None:
-        print(data + '\n')
+        print(data )
         array = data.split("|")
         if array[0] == DOG_SENSOR:
             positionArray = cane.useBrain().useMemory().updateWorld(array[1])
             decision = cane.useBrain().react(positionArray, "takeDecision(X)")
-            print("DECISION: " + str(decision[0]))
+            moveCounter += 1
+            print("DECISION " + str(moveCounter) + " :" + str(decision[0]) + '\n')
             S.sock.SendData(decision[0])
         elif array[0] == GOAL_REACHED:
             i += 1

@@ -22,4 +22,14 @@ public class DogSensorManager : Sensor
         return sensorsString;
     }
 
+    public void UpdateSensor()
+    {
+        foreach (DogSensor dogSensor in viewSensors)
+        {
+            dogSensor.OnMove();
+        }
+
+        Debug.Log("NEW SENSOR UPDATE: "+GetStringSensor());
+    }
+
 }

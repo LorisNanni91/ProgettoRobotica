@@ -6,7 +6,7 @@ public class Dog : MovableObjects
 {
    
 
-    private DogSensorManager dogSensor;
+    private DogSensorManager dogSensorManager;
     private int movesCounter = 0;
     private bool newIstructionArrived = false;
     private bool waitForIstrucition = false;
@@ -14,8 +14,7 @@ public class Dog : MovableObjects
 
     private void Start()
     {
-        dogSensor = (DogSensorManager)sensor;
-
+        dogSensorManager = (DogSensorManager)sensor;
 
     }
 
@@ -34,10 +33,13 @@ public class Dog : MovableObjects
 
         //Debug.Log("Start coroutine dog, waiting " + waitForIstrucition);
 
-        GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, transform.position);
-        GameManager.GameManagerInstance.SendSensorMessage(MessageType.DOG_SENSOR, this.dogSensor.GetStringSensor());
+        // wait for unity updating sensors
+        yield return new WaitForSeconds(2f);
 
-        Debug.Log("DOG SENSOR: " + this.dogSensor.GetStringSensor());
+        GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, transform.position);
+        GameManager.GameManagerInstance.SendSensorMessage(MessageType.DOG_SENSOR, this.dogSensorManager.GetStringSensor());
+
+        Debug.Log("DOG SENSOR: " + this.dogSensorManager.GetStringSensor());
 
         //yield return new WaitUntil(() => newIstructionArrived);
 
@@ -64,9 +66,10 @@ public class Dog : MovableObjects
 
         //Debug.Log("Execute: " + message);
 
-        Vector3 mypostion = transform.position;
+        Debug.Log("MOVE N# " + this.movesCounter + ": " + message + " current position:" + this.transform.position);
 
-        switch(message)
+
+        switch (message)
         {
             case Actions.ROTATE_LEFT:
                 transform.Rotate(new Vector3(0,-90,0),Space.Self);
@@ -104,8 +107,11 @@ public class Dog : MovableObjects
         newIstructionArrived = false;
 
         this.movesCounter++;
-        Debug.Log("MOVE N# "+this.movesCounter+": "+message);
+
+        this.dogSensorManager.UpdateSensor();
         this.PassMyTurn();
+
+        StopAllCoroutines();
 
     }
 

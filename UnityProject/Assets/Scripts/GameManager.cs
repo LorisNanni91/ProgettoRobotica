@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         {
             CounterType++;
             _turn = turnManagement[CounterType];
-            Debug.Log("TURNO DI: " + Turn);
+           // Debug.Log("TURNO DI: " + Turn);
         }
     }
 
