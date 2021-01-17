@@ -8,16 +8,10 @@ DOG_SENSOR = 'DOG_SENSOR'
 GOAL_REACHED = 'GOAL_REACHED'
 GOAL_FOUND = 'GOAL_FOUND'
 
-# Type of object detected by sensor
-EMPTY = 'EMPTY'
-SHEEP = 'SHEEP'
-OBSTACLE = 'OBSTACLE'
-WALL = 'WALL'
-GOAL = 'GOAL'
-
 initialized = False
 planedimension = None
 dogposition = None
+
 while initialized == False:
 
     data = S.sock.ReadReceivedData()# read data
@@ -25,6 +19,7 @@ while initialized == False:
     if data != None: # if NEW data has been received since last ReadReceivedData function call
         print( "primo ciclo " + data)
         array = data.split("|")
+
         if array[0] == PLANE_SIZE:
             planedimension = array[1]
         elif array[0] == DOG_POSITION:
@@ -52,5 +47,6 @@ while i < 5:
             i += 1
         elif array[0] == GOAL_FOUND:
             cane.useBrain().useMemory().setGoalPosition(array[1])
+            cane.useBrain().useLearning().LearnNewFact("goal('True')")
         elif array[0] == DOG_POSITION:
             cane.useBrain().useMemory().changeMyPosition(array[1])

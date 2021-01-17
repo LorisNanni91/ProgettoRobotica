@@ -38,11 +38,9 @@ class Brain:
             return "Error"
 
     def composeFact(self, positionArray):
-        if self.useMemory().getGoalPosition() != None:
-            fact = "perception('True'"
-        else:
-            fact = "perception('False'"
+        fact = "perception("
         for i in range(len(positionArray)):
-            fact = fact + ",'" + positionArray[i][2] + "'"
+            fact = fact + "'" + positionArray[i][2] + "',"
+        fact = fact[:-1]
         fact = fact + ")"
         return fact

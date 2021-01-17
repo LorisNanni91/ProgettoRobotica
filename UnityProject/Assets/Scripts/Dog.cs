@@ -75,10 +75,10 @@ public class Dog : MovableObjects
             case Actions.ROTATE_BACK:
                 transform.Rotate(new Vector3(0, 180, 0), Space.Self);
                 break;
-            case Actions.FORWARD_EAST:
+            case Actions.FORWARD_LEFT:
                 transform.Translate(new Vector3(1,0,1), Space.Self);
                 break;
-            case Actions.FORWARD_WEST:
+            case Actions.FORWARD_RIGHT:
                 transform.Translate(new Vector3(-1,0,1), Space.Self);
                 break;
             case Actions.FORWARD:
@@ -134,8 +134,8 @@ public static class Actions
 
     // Move
     public const string FORWARD = "Forward";
-    public const string FORWARD_EAST = "Forward-East";
-    public const string FORWARD_WEST = "Forward-West";
+    public const string FORWARD_LEFT = "Forward-Left";
+    public const string FORWARD_RIGHT = "Forward-Right";
     public const string LEFT = "Left";
     public const string RIGHT = "Right";
 }

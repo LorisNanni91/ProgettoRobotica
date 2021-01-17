@@ -53,7 +53,7 @@ class Memory:
         self.__world[arraynewposition[0]][arraynewposition[1]] = "A"
 
     def updateWorld(self, arraySensor):
-        cellsSensor = arraySensor.split("-")
+        cellsSensor = arraySensor.split(":")
         positionarray = []
 
         for i in range(len(cellsSensor)):
@@ -62,6 +62,8 @@ class Memory:
                 continue
             self.__world[int(singlePosition[0])][int(singlePosition[1])] = singlePosition[2]
             positionarray.append(singlePosition)
+
+        print(self.__world)
 
         return positionarray
 
