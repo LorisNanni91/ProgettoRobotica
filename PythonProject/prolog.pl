@@ -36,7 +36,8 @@ takeDecision('Forward-Right') :- lineSensorH1('Sensor 1,3', 'EMPTY').
 
 takeDecision('Rotate-Left') :- lineSensorH3(_, 'WALL'), \+ lateralSensor('Sensor Left', 'WALL').
 takeDecision('Rotate-Right') :- lineSensorH3(_, 'WALL'), \+ lateralSensor('Sensor Right', 'WALL').
-takeDecision('Rotate-Back') :- lineSensorH2(_,'WALL'), lineSensorV1(_,'WALL').
+takeDecision('Rotate-Back') :- lineSensorH2(_,'WALL'), lineSensorV1(_,'WALL');
+                               lineSensorH3(_, 'WALL').
 
 
 

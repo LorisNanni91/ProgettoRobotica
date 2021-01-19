@@ -89,7 +89,7 @@ class Memory:
         return positionarray
 
     def evaluateDecision(self, arraydecision):
-        decision = ""
+
         if self.__goalposition != None:
             for i in range(len(arraydecision)):
                 if arraydecision[i] == "Forward":
@@ -103,19 +103,19 @@ class Memory:
                 elif arraydecision[i] == "Forward-Right":
                     ipoteticposition = self.calcolateIpoteticPositionFR()
 
-            if self.isConvenient(ipoteticposition):
-                return arraydecision[i]
+                if self.isConvenient(ipoteticposition):
+                    return arraydecision[i]
 
         return arraydecision[random.randint(0, len(arraydecision)-1)]
 
     def isConvenient(self, ipoteticposition):
         myposition = Memory.splitStringPosition(self.__myposition)
         sheepposition = self.findNearestSheep()
-        currentx = abs(sheepposition[0] - myposition[0])
-        currenty = abs(sheepposition[1] - myposition[1])
-        ipoteticx = abs(sheepposition[0] - ipoteticposition[0])
-        ipoteticy = abs(sheepposition[1] - ipoteticposition[1])
-        if ipoteticx <= currentx and ipoteticy <= currenty:
+        currentdiffx = abs(sheepposition[0] - myposition[0])
+        currentdiffy = abs(sheepposition[1] - myposition[1])
+        ipoteticdiffx = abs(sheepposition[0] - ipoteticposition[0])
+        ipoteticdiffy = abs(sheepposition[1] - ipoteticposition[1])
+        if ipoteticdiffx <= currentdiffx and ipoteticdiffy <= currentdiffy:
             return True
 
     def findNearestSheep(self):
@@ -126,10 +126,10 @@ class Memory:
         print(self.__world.index("SHEEP"))
         while sheepposition == []:
 
-            xmin = myposition[0] - raggio if myposition[0] - raggio > 0  and myposition[0] - raggio < self.__planedim[0] else myposition[0]
-            xmax = myposition[0] + raggio if myposition[0] + raggio > 0  and myposition[0] + raggio < self.__planedim[0] else myposition[0]
-            ymin = myposition[1] - raggio if myposition[1] - raggio > 0  and myposition[1] - raggio < self.__planedim[1] else myposition[1]
-            ymax = myposition[1] + raggio if myposition[1] + raggio > 0  and myposition[1] + raggio < self.__planedim[1] else myposition[1]
+            xmin = myposition[0] - raggio if myposition[0] - raggio >= 0  and myposition[0] - raggio < self.__planedim[0] else myposition[0]
+            xmax = myposition[0] + raggio if myposition[0] + raggio >= 0  and myposition[0] + raggio < self.__planedim[0] else myposition[0]
+            ymin = myposition[1] - raggio if myposition[1] - raggio >= 0  and myposition[1] - raggio < self.__planedim[1] else myposition[1]
+            ymax = myposition[1] + raggio if myposition[1] + raggio >= 0  and myposition[1] + raggio < self.__planedim[1] else myposition[1]
 
             for i in range(xmin, xmax+1):
 
