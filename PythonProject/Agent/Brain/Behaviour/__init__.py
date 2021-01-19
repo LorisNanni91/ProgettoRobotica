@@ -15,6 +15,7 @@ class Behaviour:
             decisions = "Error"
 
         decisionarray = []
+
         for i in range(len(decisions)):
             decision = decisions[i]['X']
             decisionarray.append(decision)

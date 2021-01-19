@@ -30,8 +30,10 @@ class Brain:
         fact = self.composeFact(positionArray)
         self.__memory.putFact(fact)
         self.__learning.LearnNewFact(fact)
-        decision = self.__behaviour.takeDecision(factClass)
-        if decision != "Error":
+        decisionarray = self.__behaviour.takeDecision(factClass)
+        if decisionarray != "Error":
+            decision = self.useMemory().evaluateDecision(decisionarray)
+            print("questa è la decisione " + decision)
             self.__memory.putDecision(decision)
             return decision
         else:
