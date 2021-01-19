@@ -27,8 +27,9 @@ public class Cell
 
     public override string ToString()
     {
-        string toString = this.myPosition.x + MessageHandler.messagePositionSeparetor 
-            + this.myPosition.z + MessageHandler.messagePositionSeparetor 
+
+        string toString = Mathf.FloorToInt(Mathf.Abs(this.myPosition.x)) + MessageHandler.messagePositionSeparetor 
+            + Mathf.FloorToInt(Mathf.Abs(this.myPosition.z)) + MessageHandler.messagePositionSeparetor 
             + this.objectOnMyPosition;
 
         return toString;
