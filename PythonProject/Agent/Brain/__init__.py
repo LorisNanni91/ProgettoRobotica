@@ -32,9 +32,10 @@ class Brain:
         self.__learning.LearnNewFact(fact)
         decisionarray = self.__behaviour.takeDecision(factClass)
         if decisionarray != "Error":
-            decision = self.useMemory().evaluateDecision(decisionarray)
+            decision = self.useMemory().evaluateDecision(positionArray, decisionarray)
             print("questa è la decisione " + decision)
             self.__memory.putDecision(decision)
+            self.__memory.changeMyRotation()
             return decision
         else:
             return "Error"

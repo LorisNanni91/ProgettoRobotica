@@ -88,23 +88,27 @@ class Memory:
         print( self.__world)
         return positionarray
 
-    def evaluateDecision(self, arraydecision):
+    def evaluateDecision(self, positionArray, arraydecision):
 
         if self.__goalposition != None:
-            for i in range(len(arraydecision)):
-                if arraydecision[i] == "Forward":
-                    ipoteticposition = self.calcolateIpoteticPositionF()
-                elif arraydecision[i] == "Left":
-                    ipoteticposition = self.calcolateIpoteticPositionL()
-                elif arraydecision[i] == "Right":
-                    ipoteticposition = self.calcolateIpoteticPositionR()
-                elif arraydecision[i] == "Forward-Left":
-                    ipoteticposition = self.calcolateIpoteticPositionFL()
-                elif arraydecision[i] == "Forward-Right":
-                    ipoteticposition = self.calcolateIpoteticPositionFR()
+            elem = "SHEEP"
+            if elem not in positionArray:
+                for i in range(len(arraydecision)):
+                    if arraydecision[i] == "Forward":
+                        ipoteticposition = self.calcolateIpoteticPositionF()
+                    elif arraydecision[i] == "Left":
+                        ipoteticposition = self.calcolateIpoteticPositionL()
+                    elif arraydecision[i] == "Right":
+                        ipoteticposition = self.calcolateIpoteticPositionR()
+                    elif arraydecision[i] == "Forward-Left":
+                        ipoteticposition = self.calcolateIpoteticPositionFL()
+                    elif arraydecision[i] == "Forward-Right":
+                        ipoteticposition = self.calcolateIpoteticPositionFR()
 
-                if self.isConvenient(ipoteticposition):
-                    return arraydecision[i]
+                    if self.isConvenient(ipoteticposition):
+                        return arraydecision[i]
+            else:
+                return arraydecision[0] #da rivedere
 
         return arraydecision[random.randint(0, len(arraydecision)-1)]
 
@@ -117,9 +121,10 @@ class Memory:
         ipoteticdiffy = abs(sheepposition[1] - ipoteticposition[1])
         if ipoteticdiffx <= currentdiffx and ipoteticdiffy <= currentdiffy:
             return True
+        else:
+            return False
 
     def findNearestSheep(self):
-        #return [(ind, self.__world[ind].index ("SHEEP")) for ind in xrange (len (self.__world)) if "SHEEP" in self.__world[ind]]
         myposition = Memory.splitStringPosition()
         sheepposition = []
         raggio = 2
