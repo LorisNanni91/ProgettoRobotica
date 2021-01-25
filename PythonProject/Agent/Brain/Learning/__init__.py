@@ -5,18 +5,19 @@ class Learning:
     def __init__(self, prolog):
         self.__prolog = prolog
 
-    def LearnNewFact(self, fact):
-        factClass = fact.split("(")[0] + "(_,_,_,_,_,_,_,_,_,_,_)"
-        self.Clean(factClass)
+    def learnNewFact(self, fact):
+        factClass = fact.split("(")[0] + "(_)"
+        if factClass == "perception(_)":
+            self.clean(factClass)
         self.__prolog.assertz(str(fact))
         return
 
-    def LearnFromFile(self, filepath):
+    def learnFromFile(self, filepath):
         assert isinstance(filepath, str), "La path deve essere una stringa"
         self.__prolog.consult(filepath)
         return
 
-    def Clean(self, factClass):
+    def clean(self, factClass):
         factClass = str(factClass)
         self.__prolog.retractall(factClass)
         return
