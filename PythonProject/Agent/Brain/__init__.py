@@ -40,6 +40,8 @@ class Brain:
             if targetposition == None:
                 targetposition = self.useMemory().calcolateTarget(self.findNearestSheep(self.__memory.getMyPosition()))
 
+            print("TARGET POSITION: "+str(targetposition)) # target position
+
             #ho trovato il goal 1a fase, nell array c è pecora? se si punto quella pecora altrimenti dalla mia posizione cerco la pecora più vicina che ricordo, se non ne ricordo nessuna esploro
             for i in range(len(positionArray)):
                 if positionArray[i][0] == targetposition[0] and positionArray[i][1] == targetposition[1]:
@@ -47,6 +49,7 @@ class Brain:
         fact = Brain.composeFact(positionArray)
         self.__memory.putFact(fact)
         self.__learning.learnNewFact(fact)
+        print(fact)
         decisionarray = (self.__behaviour.takeDecision(factClass))
         if len(decisionarray) > 0 and decisionarray != "Error":
             decision = self.evaluateDecision(positionArray, decisionarray)
@@ -82,8 +85,9 @@ class Brain:
                 else:
                     return arraydecision[0]  # da rivedere
             else:
-                if self.__memory.getWorld()[ipoteticposition[0]][ipoteticposition[1]] == '0':
-                    return arraydecision[i]
+                if arraydecision[i] != 'Rotate-Back' and arraydecision[i] !='Rotate-Left' and arraydecision[i] != 'Rotate-Right':
+                    if self.__memory.getWorld()[ipoteticposition[0]][ipoteticposition[1]] == '0':
+                        return arraydecision[i]
 
         return arraydecision[random.randint(0, len(arraydecision) - 1)]
         # myposition = self.useMemory().getMyPosition()

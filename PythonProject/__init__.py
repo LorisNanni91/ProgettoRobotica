@@ -35,7 +35,7 @@ while initialized == False:
 
 print("dimensione piano " + str(planedimension) + " posizione cane " + str(dogposition))
 cane = Agent.Agent(dogposition, planedimension)
-cane.useBrain().useLearning().learnFromFile("test.pl")
+cane.useBrain().useLearning().learnFromFile("prolog.pl")
 
 i = 0
 while i < 5:

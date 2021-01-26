@@ -23,12 +23,12 @@ lineSensorV3('Sensor 3,3',S9) :- perception(_,_,_,_,_,_,_,_,S9,_,_).
 lateralSensor('Sensor Left', S10) :- perception(_,_,_,_,_,_,_,_,_,S10,_).
 lateralSensor('Sensor Right', S11) :- perception(_,_,_,_,_,_,_,_,_,_,S11).
 
+takeDecision('Rotate-Back') :- lineSensorH1(_,'WALL'),!.
 takeDecision('Forward') :- lineSensorH1('Sensor 1,2', 'TARGET'),!.
 takeDecision('Left') :- lateralSensor('Sensor Left','TARGET'),!.
 takeDecision('Right') :- lateralSensor('Sensor Right','TARGET'),!.
 takeDecision('Forward-Left') :- lineSensorH1('Sensor 1,1', 'TARGET'),!.
 takeDecision('Forward-Right') :- lineSensorH1('Sensor 1,3', 'TARGET'),!.
-takeDecision('Rotate-Back') :- lineSensorH1(_,'WALL'),!.
 
 takeDecision('Rotate-Left') :- lineSensorH3(_, 'WALL'), \+ lateralSensor('Sensor Left', 'WALL').
 takeDecision('Rotate-Right') :- lineSensorH3(_, 'WALL'), \+ lateralSensor('Sensor Right', 'WALL').
@@ -43,7 +43,7 @@ takeDecision('Forward') :- lineSensorH1('Sensor 1,2', 'EMPTY'), lineSensorH3('Se
                            lineSensorH1('Sensor 1,2', 'EMPTY'), \+ lineSensorH3(_,'WALL').
 
 
-takeDecision('Left') :- lateralSensor('Sensor Left', 'EMPTY'), lineSensorH3('Sensor 3,1', 'TARGET').
+takeDecision('Left') :- lateralSensor('Sensor Left', 'EMPTY'), lineSensorH3('Sensor 3,1', 'TARGET');
                         lateralSensor('Sensor Left', 'EMPTY'), lineSensorH3('Sensor 3,2', 'TARGET');
                         lateralSensor('Sensor Left', 'EMPTY'), lineSensorH2('Sensor 2,1','SHEEP');
                         lateralSensor('Sensor Left', 'EMPTY'), lineSensorH2('Sensor 2,1','TARGET'), lineSensorH2('Sensor 2,2','SHEEP').
