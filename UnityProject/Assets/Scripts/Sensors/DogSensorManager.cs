@@ -29,7 +29,7 @@ public class DogSensorManager : Sensor
             dogSensor.OnMove();
         }
 
-        Debug.Log("NEW SENSOR UPDATE: "+GetStringSensor());
+        //Debug.Log("NEW SENSOR UPDATE: "+GetStringSensor());
     }
 
 }

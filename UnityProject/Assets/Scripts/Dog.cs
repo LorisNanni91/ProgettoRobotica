@@ -34,12 +34,14 @@ public class Dog : MovableObjects
         //Debug.Log("Start coroutine dog, waiting " + waitForIstrucition);
 
         // wait for unity updating sensors
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
+
+        Debug.Log("DOG SENSOR: prima invio " + this.dogSensorManager.GetStringSensor());
 
         GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, transform.position);
         GameManager.GameManagerInstance.SendSensorMessage(MessageType.DOG_SENSOR, this.dogSensorManager.GetStringSensor());
 
-        Debug.Log("DOG SENSOR: " + this.dogSensorManager.GetStringSensor());
+        Debug.Log("DOG SENSOR: dopo invio " + this.dogSensorManager.GetStringSensor());
 
         //yield return new WaitUntil(() => newIstructionArrived);
 

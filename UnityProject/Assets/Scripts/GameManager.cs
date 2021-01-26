@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         GameManagerInstance = this;
-
+        
         Debug.Log("sono qui");
         connection.SendMessage(MessageType.PLANE_SIZE, plane.size);
         Debug.Log("Mandato dimensione piano");

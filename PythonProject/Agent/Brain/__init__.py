@@ -47,11 +47,11 @@ class Brain:
         fact = Brain.composeFact(positionArray)
         self.__memory.putFact(fact)
         self.__learning.learnNewFact(fact)
-        decisionarray = self.__behaviour.takeDecision(factClass)
+        decisionarray = (self.__behaviour.takeDecision(factClass))
         if decisionarray != "Error":
-            #da rivedere decision = self.evaluateDecision(positionArray, decisionarray)
-            decision = "Forward"
-            print("questa è la decisione " + decision)
+            decision = self.evaluateDecision(positionArray, decisionarray)
+            # decision = decisionarray[0]
+            print("questa è la decisione " + str(decisionarray))
             self.__memory.putDecision(decision)
             #self.__memory.changeMyRotation()
             return decision
@@ -90,7 +90,7 @@ class Brain:
         currentdiffy = abs(sheepposition[1] - myposition[1])
         ipoteticdiffx = abs(sheepposition[0] - ipoteticposition[0])
         ipoteticdiffy = abs(sheepposition[1] - ipoteticposition[1])
-        if ipoteticdiffx <= currentdiffx and ipoteticdiffy <= currentdiffy:
+        if ipoteticdiffx <= currentdiffx + 1 and ipoteticdiffy <= currentdiffy +1:
             return True
         else:
             return False
@@ -198,5 +198,4 @@ class Brain:
             fact = fact + "'" + positionArray[i][2] + "',"
         fact = fact[:-1]
         fact = fact + ")"
-        print("fact: " + fact)
         return fact

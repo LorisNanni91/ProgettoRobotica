@@ -35,7 +35,7 @@ while initialized == False:
 
 print("dimensione piano " + str(planedimension) + " posizione cane " + str(dogposition))
 cane = Agent.Agent(dogposition, planedimension)
-cane.useBrain().useLearning().learnFromFile("prolog.pl")
+cane.useBrain().useLearning().learnFromFile("test.pl")
 
 i = 0
 while i < 5:
@@ -48,12 +48,12 @@ while i < 5:
             decision = cane.reaction(array[1])
             S.sock.SendData(decision)
             if decision != "Errore":
+                print ("DECISION " + str (moveCounter) + " :" + str (decision) + '\n')
                 moveCounter += 1
             # cane.useSensor().whatIsee(array[1])
             # positionArray = cane.useBrain().useMemory().updateWorld(array[1])
             # decision = cane.useBrain().react(positionArray, "takeDecision(X)")
 
-            print("DECISION " + str(moveCounter) + " :" + str(decision) + '\n')
 
         elif array[0] == GOAL_REACHED:
             i += 1

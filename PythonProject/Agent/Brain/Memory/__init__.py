@@ -33,8 +33,9 @@ class Memory:
         self.__world[int(self.__myposition[0])][int(self.__myposition[1])] = "EMPTY"
         self.__myposition = newposition
         self.__world[int(newposition[0])][int(newposition[1])] = "A"
-        if self.__myposition[0] == self.__targetposition[0] and self.__myposition[1] == self.__targetposition[1]:
-            self.__targetposition = None
+        if self.__targetposition != None:
+            if int(self.__myposition[0]) == int(self.__targetposition[0]) and int(self.__myposition[1]) == int(self.__targetposition[1]):
+                self.__targetposition = None
         return
 
     def getGoalPosition(self):
@@ -74,7 +75,6 @@ class Memory:
 
     def updateWorld(self, arraySensor):
         for i in range(len(arraySensor)):
-            print("riga: " + str(arraySensor[i]) + " ele 1: " + str(arraySensor[i][1]))
             if (int(arraySensor[i][0]) < 0 or int(arraySensor[i][1]) < 0 or int(arraySensor[i][0]) > int(self.__planedim[0]) - 1 or int(arraySensor[i][1]) > int(self.__planedim[1]) - 1):
                 continue
             self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] = arraySensor[i][2]
