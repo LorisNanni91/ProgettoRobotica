@@ -28,12 +28,29 @@ class Brain:
         return self.__behaviour
 
     def react(self, positionArray, factClass):
+
+        if self.__memory.getGoalPosition() != None:
+            targetposition = self.useMemory().getTargetPosition()
+
+            if targetposition == None:
+                for i in range(len(positionArray)):
+                    if positionArray[i][2] == "SHEEP":
+                        targetposition = self.useMemory().calcolateTarget(positionArray[i])
+                        break
+            if targetposition == None:
+                targetposition = self.useMemory().calcolateTarget(self.findNearestSheep(self.__memory.getMyPosition()))
+
+            #ho trovato il goal 1a fase, nell array c è pecora? se si punto quella pecora altrimenti dalla mia posizione cerco la pecora più vicina che ricordo, se non ne ricordo nessuna esploro
+            for i in range(len(positionArray)):
+                if positionArray[i][0] == targetposition[0] and positionArray[i][1] == targetposition[1]:
+                    positionArray[i][2] = "TARGET"
         fact = Brain.composeFact(positionArray)
         self.__memory.putFact(fact)
         self.__learning.learnNewFact(fact)
         decisionarray = self.__behaviour.takeDecision(factClass)
         if decisionarray != "Error":
-            decision = self.evaluateDecision(positionArray, decisionarray)
+            #da rivedere decision = self.evaluateDecision(positionArray, decisionarray)
+            decision = "Forward"
             print("questa è la decisione " + decision)
             self.__memory.putDecision(decision)
             #self.__memory.changeMyRotation()
@@ -175,6 +192,7 @@ class Brain:
 
     @staticmethod
     def composeFact(positionArray):
+
         fact = "perception("
         for i in range(len(positionArray)):
             fact = fact + "'" + positionArray[i][2] + "',"

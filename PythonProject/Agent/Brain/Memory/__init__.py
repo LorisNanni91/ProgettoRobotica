@@ -10,6 +10,7 @@ class Memory:
     __myposition = None
     __myorientation = None
     __planedim = None
+    __targetposition = None
 
     def __init__(self, myposition, planedimension):
         self.__decisions = []
@@ -32,6 +33,8 @@ class Memory:
         self.__world[int(self.__myposition[0])][int(self.__myposition[1])] = "EMPTY"
         self.__myposition = newposition
         self.__world[int(newposition[0])][int(newposition[1])] = "A"
+        if self.__myposition[0] == self.__targetposition[0] and self.__myposition[1] == self.__targetposition[1]:
+            self.__targetposition = None
         return
 
     def getGoalPosition(self):
@@ -89,6 +92,38 @@ class Memory:
         #
         # print( self.__world)
         # return positionarray
+
+    def calcolateTarget(self, sheepposition):
+        #DA CONTROLLARE SE TARGET è VUOTO
+        deltax = sheepposition[0] - self.__goalposition[0]
+        deltay = sheepposition[1] - self.__goalposition[1]
+        delta = []
+        if deltax > 0:
+            delta.append('1')
+        elif deltax < 0:
+            delta.append('-1')
+        elif deltax == 0:
+            delta.append('0')
+
+        if deltay > 0:
+            delta.append('1')
+        elif deltay < 0:
+            delta.append('-1')
+        elif deltay == 0:
+            delta.append('0')
+
+        targetposition = [int(sheepposition[0]) + int(delta[0]), int(sheepposition[1]) + int(delta[1])]
+        if self.__world[int(targetposition[0])][int(targetposition[1])] == 'EMPTY' or self.__world[int(targetposition[0])][int(targetposition[1])] == '0':
+            self.__targetposition = targetposition
+        else:
+            targetposition = 1
+            #da vedere
+
+        return self.__targetposition
+
+    def getTargetPosition(self):
+        return self.__targetposition
+
     # def changeMyRotation(self):
     #     decision = self.getLastDecision()
     #     if decision == "Rotate-Right":
