@@ -48,7 +48,7 @@ class Brain:
         self.__memory.putFact(fact)
         self.__learning.learnNewFact(fact)
         decisionarray = (self.__behaviour.takeDecision(factClass))
-        if decisionarray != "Error":
+        if len(decisionarray) > 0 and decisionarray != "Error":
             decision = self.evaluateDecision(positionArray, decisionarray)
             # decision = decisionarray[0]
             print("questa è la decisione " + str(decisionarray))
@@ -61,35 +61,62 @@ class Brain:
     def evaluateDecision(self, positionArray, arraydecision):
         myposition = self.useMemory().getMyPosition()
         myorientation = self.useMemory().getMyOrientation()
+        ipoteticposition = None
+        for i in range(len(arraydecision)):
+            if arraydecision[i] == "Forward":
+                ipoteticposition = self.calcolateIpoteticPositionF(myposition, myorientation)
+            elif arraydecision[i] == "Left":
+                ipoteticposition = self.calcolateIpoteticPositionL(myposition, myorientation)
+            elif arraydecision[i] == "Right":
+                ipoteticposition = self.calcolateIpoteticPositionR(myposition, myorientation)
+            elif arraydecision[i] == "Forward-Left":
+                ipoteticposition = self.calcolateIpoteticPositionFL(myposition, myorientation)
+            elif arraydecision[i] == "Forward-Right":
+                ipoteticposition = self.calcolateIpoteticPositionFR(myposition, myorientation)
 
-        if self.useMemory().getGoalPosition() != None:
-            elem = "SHEEP"
-            if elem not in positionArray:
-                for i in range(len(arraydecision)):
-                    if arraydecision[i] == "Forward":
-                        ipoteticposition = self.calcolateIpoteticPositionF(myposition, myorientation)
-                    elif arraydecision[i] == "Left":
-                        ipoteticposition = self.calcolateIpoteticPositionL(myposition, myorientation)
-                    elif arraydecision[i] == "Right":
-                        ipoteticposition = self.calcolateIpoteticPositionR(myposition, myorientation)
-                    elif arraydecision[i] == "Forward-Left":
-                        ipoteticposition = self.calcolateIpoteticPositionFL(myposition, myorientation)
-                    elif arraydecision[i] == "Forward-Right":
-                        ipoteticposition = self.calcolateIpoteticPositionFR(myposition, myorientation)
-
+            if self.useMemory().getGoalPosition() != None:
+                elem = "SHEEP"
+                if elem not in positionArray:
                     if self.isConvenient(ipoteticposition, myposition):
-                        return arraydecision[i]
+                            return arraydecision[i]
+                else:
+                    return arraydecision[0]  # da rivedere
             else:
-                return arraydecision[0] #da rivedere
+                if self.__memory.getWorld()[ipoteticposition[0]][ipoteticposition[1]] == '0':
+                    return arraydecision[i]
 
-        return arraydecision[random.randint(0, len(arraydecision)-1)]
+        return arraydecision[random.randint(0, len(arraydecision) - 1)]
+        # myposition = self.useMemory().getMyPosition()
+        # myorientation = self.useMemory().getMyOrientation()
+        #
+        # if self.useMemory().getGoalPosition() != None:
+        #     elem = "SHEEP"
+        #     if elem not in positionArray:
+        #         for i in range(len(arraydecision)):
+        #             if arraydecision[i] == "Forward":
+        #                 ipoteticposition = self.calcolateIpoteticPositionF(myposition, myorientation)
+        #             elif arraydecision[i] == "Left":
+        #                 ipoteticposition = self.calcolateIpoteticPositionL(myposition, myorientation)
+        #             elif arraydecision[i] == "Right":
+        #                 ipoteticposition = self.calcolateIpoteticPositionR(myposition, myorientation)
+        #             elif arraydecision[i] == "Forward-Left":
+        #                 ipoteticposition = self.calcolateIpoteticPositionFL(myposition, myorientation)
+        #             elif arraydecision[i] == "Forward-Right":
+        #                 ipoteticposition = self.calcolateIpoteticPositionFR(myposition, myorientation)
+        #
+        #             if self.isConvenient(ipoteticposition, myposition):
+        #                 return arraydecision[i]
+        #     else:
+        #         return arraydecision[0] #da rivedere
+        #
+        # return arraydecision[random.randint(0, len(arraydecision)-1)]
 
     def isConvenient(self, ipoteticposition, myposition):
         sheepposition = self.findNearestSheep(myposition)
-        currentdiffx = abs(sheepposition[0] - myposition[0])
-        currentdiffy = abs(sheepposition[1] - myposition[1])
-        ipoteticdiffx = abs(sheepposition[0] - ipoteticposition[0])
-        ipoteticdiffy = abs(sheepposition[1] - ipoteticposition[1])
+        currentdiffx = abs(int(sheepposition[0]) - int(myposition[0]))
+        currentdiffy = abs(int(sheepposition[1]) - int(myposition[1]))
+        ipoteticdiffx = abs(int(sheepposition[0]) - ipoteticposition[0])
+        ipoteticdiffy = abs(int(sheepposition[1]) - ipoteticposition[1])
         if ipoteticdiffx <= currentdiffx + 1 and ipoteticdiffy <= currentdiffy +1:
             return True
         else:
@@ -101,10 +128,10 @@ class Brain:
         #print(self.__world.index("SHEEP"))
         while sheepposition == []:
 
-            xmin = myposition[0] - raggio if myposition[0] - raggio >= 0  and myposition[0] - raggio < self.__memory.getMyOrientation()[0] else myposition[0]
-            xmax = myposition[0] + raggio if myposition[0] + raggio >= 0  and myposition[0] + raggio < self.__memory.getMyOrientation()[0] else myposition[0]
-            ymin = myposition[1] - raggio if myposition[1] - raggio >= 0  and myposition[1] - raggio < self.__memory.getMyOrientation()[1] else myposition[1]
-            ymax = myposition[1] + raggio if myposition[1] + raggio >= 0  and myposition[1] + raggio < self.__memory.getMyOrientation()[1] else myposition[1]
+            xmin = int(myposition[0]) - raggio if int(myposition[0]) - raggio >= 0  and int(myposition[0]) - raggio < self.__memory.getMyOrientation()[0] else int(myposition[0])
+            xmax = int(myposition[0]) + raggio if int(myposition[0]) + raggio >= 0  and int(myposition[0]) + raggio < self.__memory.getMyOrientation()[0] else int(myposition[0])
+            ymin = int(myposition[1]) - raggio if int(myposition[1]) - raggio >= 0  and int(myposition[1]) - raggio < self.__memory.getMyOrientation()[1] else int(myposition[1])
+            ymax = int(myposition[1]) + raggio if int(myposition[1]) + raggio >= 0  and int(myposition[1]) + raggio < self.__memory.getMyOrientation()[1] else int(myposition[1])
 
             for i in range(xmin, xmax+1):
 
@@ -120,65 +147,65 @@ class Brain:
     def calcolateIpoteticPositionF(self, myposition, myorientation):
         newposition = []
         if myorientation == 0:
-            newposition = [myposition[0], myposition[1] + 1]
+            newposition = [int(myposition[0]), int(myposition[1]) + 1]
         elif myorientation == 90:
-            newposition = [myposition[0] + 1, myposition[1]]
+            newposition = [int(myposition[0]) + 1, int(myposition[1])]
         elif myorientation == 180:
-            newposition = [myposition[0], myposition[1] - 1]
+            newposition = [int(myposition[0]), int(myposition[1]) - 1]
         elif myorientation == 270:
-            newposition = [myposition[0] - 1, myposition[1]]
+            newposition = [int(myposition[0]) - 1, int(myposition[1])]
 
         return newposition
     
     def calcolateIpoteticPositionFR(self, myposition, myorientation):
         newposition = []
         if myorientation == 0:
-            newposition = [myposition[0]+1, myposition[1]+1]
+            newposition = [int(myposition[0])+1, int(myposition[1])+1]
         elif myorientation == 90:
-            newposition = [myposition[0]+1, myposition[1]-1]
+            newposition = [int(myposition[0])+1, int(myposition[1])-1]
         elif myorientation == 180:
-            newposition = [myposition[0]-1, myposition[1]-1]
+            newposition = [int(myposition[0])-1, int(myposition[1])-1]
         elif myorientation == 270:
-            newposition = [myposition[0]-1, myposition[1]+1]
+            newposition = [int(myposition[0])-1, int(myposition[1])+1]
 
         return newposition
     
     def calcolateIpoteticPositionFL(self, myposition, myorientation):
         newposition = []
         if myorientation == 0:
-            newposition = [myposition[0]-1, myposition[1]+1]
+            newposition = [int(myposition[0])-1, int(myposition[1])+1]
         elif myorientation == 90:
-            newposition = [myposition[0]+1, myposition[1]+1]
+            newposition = [int(myposition[0])+1, int(myposition[1])+1]
         elif myorientation == 180:
-            newposition = [myposition[0]+1, myposition[1]-1]
+            newposition = [int(myposition[0])+1, int(myposition[1])-1]
         elif myorientation == 270:
-            newposition = [myposition[0]-1, myposition[1]-1]
+            newposition = [int(myposition[0])-1, int(myposition[1])-1]
 
         return newposition
     
     def calcolateIpoteticPositionR(self, myposition, myorientation):
         newposition = []
         if myorientation == 0:
-            newposition = [myposition[0]+1, myposition[1]]
+            newposition = [int(myposition[0])+1, int(myposition[1])]
         elif myorientation == 90:
-            newposition = [myposition[0], myposition[1]-1]
+            newposition = [int(myposition[0]), int(myposition[1])-1]
         elif myorientation == 180:
-            newposition = [myposition[0]-1, myposition[1]]
+            newposition = [int(myposition[0])-1, int(myposition[1])]
         elif myorientation == 270:
-            newposition = [myposition[0], myposition[1]+1]
+            newposition = [int(myposition[0]), int(myposition[1])+1]
 
         return newposition
     
     def calcolateIpoteticPositionL(self, myposition, myorientation):
         newposition = []
         if myorientation == 0:
-            newposition = [myposition[0]-1, myposition[1]]
+            newposition = [int(myposition[0])-1, int(myposition[1])]
         elif myorientation == 90:
-            newposition = [myposition[0], myposition[1]+1]
+            newposition = [int(myposition[0]), int(myposition[1])+1]
         elif myorientation == 180:
-            newposition = [myposition[0]+1, myposition[1]]
+            newposition = [int(myposition[0])+1, int(myposition[1])]
         elif myorientation == 270:
-            newposition = [myposition[0], myposition[1]-1]
+            newposition = [int(myposition[0]), int(myposition[1])-1]
 
         return newposition
 

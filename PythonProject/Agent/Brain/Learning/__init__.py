@@ -6,9 +6,9 @@ class Learning:
         self.__prolog = prolog
 
     def learnNewFact(self, fact):
-        factClass = fact.split("(")[0] + "(_)"
-        if factClass == "perception(_)":
-            self.clean(factClass)
+        factClass = fact.split("(")[0] + "(_,_,_,_,_,_,_,_,_,_,_)"
+        if factClass == "perception(_,_,_,_,_,_,_,_,_,_,_)":
+            self.cleanPerception(factClass)
         self.__prolog.assertz(str(fact))
         return
 
@@ -17,7 +17,7 @@ class Learning:
         self.__prolog.consult(filepath)
         return
 
-    def clean(self, factClass):
+    def cleanPerception(self, factClass):
         factClass = str(factClass)
         self.__prolog.retractall(factClass)
         return
