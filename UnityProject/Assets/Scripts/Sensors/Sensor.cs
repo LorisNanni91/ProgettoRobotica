@@ -28,8 +28,8 @@ public class Cell
     public override string ToString()
     {
 
-        string toString = Mathf.FloorToInt(Mathf.Abs(this.myPosition.x)) + MessageHandler.messagePositionSeparetor 
-            + Mathf.FloorToInt(Mathf.Abs(this.myPosition.z)) + MessageHandler.messagePositionSeparetor 
+        string toString = Mathf.RoundToInt(this.myPosition.x) + MessageHandler.messagePositionSeparetor 
+            + Mathf.RoundToInt(this.myPosition.z) + MessageHandler.messagePositionSeparetor 
             + this.objectOnMyPosition;
 
         return toString;

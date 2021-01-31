@@ -41,6 +41,7 @@ public class Dog : MovableObjects
         Debug.Log("DOG SENSOR: prima invio " + this.dogSensorManager.GetStringSensor());
 
         GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, transform.position);
+        yield return new WaitForSeconds(1f);
         GameManager.GameManagerInstance.SendSensorMessage(MessageType.DOG_SENSOR, this.dogSensorManager.GetStringSensor());
 
         Debug.Log("DOG SENSOR: dopo invio " + this.dogSensorManager.GetStringSensor());
@@ -111,8 +112,6 @@ public class Dog : MovableObjects
         newIstructionArrived = false;
 
         this.movesCounter++;
-
-        this.dogSensorManager.UpdateSensor();
         this.PassMyTurn();
 
         StopAllCoroutines();
