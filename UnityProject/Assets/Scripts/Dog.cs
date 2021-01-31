@@ -33,8 +33,10 @@ public class Dog : MovableObjects
 
         //Debug.Log("Start coroutine dog, waiting " + waitForIstrucition);
 
+        this.dogSensorManager.UpdateSensor();
+
         // wait for unity updating sensors
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
 
         Debug.Log("DOG SENSOR: prima invio " + this.dogSensorManager.GetStringSensor());
 
@@ -83,10 +85,10 @@ public class Dog : MovableObjects
                 transform.Rotate(new Vector3(0, 180, 0), Space.Self);
                 break;
             case Actions.FORWARD_LEFT:
-                transform.Translate(new Vector3(1,0,1), Space.Self);
+                transform.Translate(new Vector3(-1,0,1), Space.Self);
                 break;
             case Actions.FORWARD_RIGHT:
-                transform.Translate(new Vector3(-1,0,1), Space.Self);
+                transform.Translate(new Vector3(1,0,1), Space.Self);
                 break;
             case Actions.FORWARD:
                 transform.Translate(Vector3.forward,Space.Self);

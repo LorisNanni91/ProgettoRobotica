@@ -34,7 +34,6 @@ public class DogSensor : Sensor
     public void OnMove()
     {
         myCell = new Cell(transform.position, OBJECTSTYPE.EMPTY);
-
     }
 
 
