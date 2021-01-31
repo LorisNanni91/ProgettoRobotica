@@ -44,20 +44,25 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         GameManagerInstance = this;
-        
-        Debug.Log("sono qui");
-        connection.SendMessage(MessageType.PLANE_SIZE, plane.size);
-        Debug.Log("Mandato dimensione piano");
-        connection.SendMessage(MessageType.DOG_POSITION, dog.transform.position);
+
+        StartCoroutine(SendInitialData());
 
         // Initial turn is for the dog
         _turn = turnManagement[CounterType];
     }
 
-    private void Start()
+    IEnumerator SendInitialData()
     {
+        yield return new WaitForSeconds(1f);
 
+        Debug.Log("PLANE SIZE: " + plane.size);
+        connection.SendMessage(MessageType.PLANE_SIZE, plane.size);
+        yield return new WaitForSeconds(1f);
 
+        connection.SendMessage(MessageType.DOG_POSITION, dog.transform.position);
+        Debug.Log("DOG POSITION: " + plane.size);
+
+        yield return null;
     }
 
     public void PassTurn(OBJECTSTYPE type)
