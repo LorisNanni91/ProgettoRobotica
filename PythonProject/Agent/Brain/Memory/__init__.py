@@ -11,6 +11,7 @@ class Memory:
     __myorientation = None
     __planedim = None
     __targetposition = None
+    __mylastpositions = []
 
     def __init__(self, myposition, planedimension):
         self.__decisions = []
@@ -26,11 +27,25 @@ class Memory:
         self.__myorientation = (self.__myorientation + rotazione) % 360
         return
 
+    def calculateRotation(self):
+        decision = self.getLastDecision()
+        rotation = 0
+        if decision == "Rotate-Right":
+            rotation = 90
+        elif decision == "Rotate-Back":
+            rotation = 180
+        elif decision == "Rotate-Left":
+            rotation = 270
+        return rotation
+
     def getMyPosition(self):
         return self.__myposition
 
     def changeMyPosition(self, newposition):
         self.__world[int(self.__myposition[0])][int(self.__myposition[1])] = "EMPTY"
+        if len(self.__mylastpositions) == 3:
+            self.__mylastpositions.pop(0)
+        self.__mylastpositions.append(self.__myposition)
         self.__myposition = newposition
         self.__world[int(newposition[0])][int(newposition[1])] = "A"
         if self.__targetposition != None:
@@ -44,6 +59,9 @@ class Memory:
     def setGoalPosition(self, position):
         self.__goalposition = position
         return
+
+    def getPlaneSize(self):
+        return self.__planedim
 
     def getLastFact(self):
         return self.__facts[len(self.__facts)-1]
@@ -79,24 +97,10 @@ class Memory:
                 continue
             self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] = arraySensor[i][2]
         return
-        # cellsSensor = arraySensor.split(":")
-        # positionarray = []
-        #
-        # for i in range(len(cellsSensor)):
-        #     self.__world[i][0]
-        #     singlePosition = cellsSensor[i].split(",")
-        #     positionarray.append(singlePosition)
-        #     if ( int(singlePosition[0]) < 0 or int(singlePosition[1]) < 0 or int(singlePosition[0]) > self.__planedim[0] - 1 or int(singlePosition[1]) > self.__planedim[1] - 1):
-        #         continue
-        #     self.__world[int(singlePosition[0])][int(singlePosition[1])] = singlePosition[2]
-        #
-        # print( self.__world)
-        # return positionarray
 
     def calcolateTarget(self, sheepposition):
-        #DA CONTROLLARE SE TARGET è VUOTO
-        deltax = sheepposition[0] - self.__goalposition[0]
-        deltay = sheepposition[1] - self.__goalposition[1]
+        deltax = int(sheepposition[0]) - int(self.__goalposition[0])
+        deltay = int(sheepposition[1]) - int(self.__goalposition[1])
         delta = []
         if deltax > 0:
             delta.append('1')
@@ -112,7 +116,9 @@ class Memory:
         elif deltay == 0:
             delta.append('0')
 
-        targetposition = [int(sheepposition[0]) + int(delta[0]), int(sheepposition[1]) + int(delta[1])]
+        targetpositionx = (int(sheepposition[0]) + int(delta[0])) if (int(sheepposition[0]) + int(delta[0])) < int(self.__planedim[0]) else int(sheepposition[0])
+        targetpositiony = (int(sheepposition[1]) + int(delta[1])) if (int(sheepposition[1]) + int(delta[1])) < int(self.__planedim[1]) else int(sheepposition[1])
+        targetposition = [targetpositionx, targetpositiony]
         if self.__world[int(targetposition[0])][int(targetposition[1])] == 'EMPTY' or self.__world[int(targetposition[0])][int(targetposition[1])] == '0':
             self.__targetposition = targetposition
         else:
@@ -124,153 +130,9 @@ class Memory:
     def getTargetPosition(self):
         return self.__targetposition
 
-    # def changeMyRotation(self):
-    #     decision = self.getLastDecision()
-    #     if decision == "Rotate-Right":
-    #         self.__myorientation += 90
-    #     elif decision == "Rotate-Back":
-    #         self.__myorientation += 180
-    #     elif decision == "Rotate-Left":
-    #         self.__myorientation += 270
-    #     self.__myorientation = self.__myorientation % 360
+    def recentlyVisited(self, ipoteticposition):
+        for i in range(len(self.__mylastpositions)):
+            if ipoteticposition[0] == self.__mylastpositions[i][0] and ipoteticposition[1] == self.__mylastpositions[i][1]:
+                return True
 
-
-
-    # def evaluateDecision(self, positionArray, arraydecision):
-    #
-    #     if self.__goalposition != None:
-    #         elem = "SHEEP"
-    #         if elem not in positionArray:
-    #             for i in range(len(arraydecision)):
-    #                 if arraydecision[i] == "Forward":
-    #                     ipoteticposition = self.calcolateIpoteticPositionF()
-    #                 elif arraydecision[i] == "Left":
-    #                     ipoteticposition = self.calcolateIpoteticPositionL()
-    #                 elif arraydecision[i] == "Right":
-    #                     ipoteticposition = self.calcolateIpoteticPositionR()
-    #                 elif arraydecision[i] == "Forward-Left":
-    #                     ipoteticposition = self.calcolateIpoteticPositionFL()
-    #                 elif arraydecision[i] == "Forward-Right":
-    #                     ipoteticposition = self.calcolateIpoteticPositionFR()
-    #
-    #                 if self.isConvenient(ipoteticposition):
-    #                     return arraydecision[i]
-    #         else:
-    #             return arraydecision[0] #da rivedere
-    #
-    #     return arraydecision[random.randint(0, len(arraydecision)-1)]
-
-    # def isConvenient(self, ipoteticposition):
-    #     myposition = Memory.splitStringPosition(self.__myposition)
-    #     sheepposition = self.findNearestSheep()
-    #     currentdiffx = abs(sheepposition[0] - myposition[0])
-    #     currentdiffy = abs(sheepposition[1] - myposition[1])
-    #     ipoteticdiffx = abs(sheepposition[0] - ipoteticposition[0])
-    #     ipoteticdiffy = abs(sheepposition[1] - ipoteticposition[1])
-    #     if ipoteticdiffx <= currentdiffx and ipoteticdiffy <= currentdiffy:
-    #         return True
-    #     else:
-    #         return False
-
-    # def findNearestSheep(self):
-    #     myposition = Memory.splitStringPosition()
-    #     sheepposition = []
-    #     raggio = 2
-    #     print(self.__world.index("SHEEP"))
-    #     while sheepposition == []:
-    #
-    #         xmin = myposition[0] - raggio if myposition[0] - raggio >= 0  and myposition[0] - raggio < self.__planedim[0] else myposition[0]
-    #         xmax = myposition[0] + raggio if myposition[0] + raggio >= 0  and myposition[0] + raggio < self.__planedim[0] else myposition[0]
-    #         ymin = myposition[1] - raggio if myposition[1] - raggio >= 0  and myposition[1] - raggio < self.__planedim[1] else myposition[1]
-    #         ymax = myposition[1] + raggio if myposition[1] + raggio >= 0  and myposition[1] + raggio < self.__planedim[1] else myposition[1]
-    #
-    #         for i in range(xmin, xmax+1):
-    #
-    #             y = Memory.indexOf(self.__world[i], "SHEEP", ymin, ymax)
-    #
-    #             if y != "Non trovato":
-    #
-    #                 sheepposition.append(i)
-    #                 sheepposition.append(y)
-    #
-    #     return sheepposition
-
-    # def calcolateIpoteticPositionL(self):
-    #     newposition = []
-    #     myposition = Memory.splitStringPosition(self.__myposition)
-    #     if self.__myorientation == 0:
-    #         newposition = [myposition[0]-1, myposition[1]]
-    #     elif self.__myorientation == 90:
-    #         newposition = [myposition[0], myposition[1]+1]
-    #     elif self.__myorientation == 180:
-    #         newposition = [myposition[0]+1, myposition[1]]
-    #     elif self.__myorientation == 270:
-    #         newposition = [myposition[0], myposition[1]-1]
-    #
-    #     return newposition
-
-    # def calcolateIpoteticPositionR(self):
-    #     newposition = []
-    #     myposition = Memory.splitStringPosition (self.__myposition)
-    #     if self.__myorientation == 0:
-    #         newposition = [myposition[0]+1, myposition[1]]
-    #     elif self.__myorientation == 90:
-    #         newposition = [myposition[0], myposition[1]-1]
-    #     elif self.__myorientation == 180:
-    #         newposition = [myposition[0]-1, myposition[1]]
-    #     elif self.__myorientation == 270:
-    #         newposition = [myposition[0], myposition[1]+1]
-    #
-    #     return newposition
-
-    # def calcolateIpoteticPositionFL(self):
-    #     newposition = []
-    #     myposition = Memory.splitStringPosition (self.__myposition)
-    #     if self.__myorientation == 0:
-    #         newposition = [myposition[0]-1, myposition[1]+1]
-    #     elif self.__myorientation == 90:
-    #         newposition = [myposition[0]+1, myposition[1]+1]
-    #     elif self.__myorientation == 180:
-    #         newposition = [myposition[0]+1, myposition[1]-1]
-    #     elif self.__myorientation == 270:
-    #         newposition = [myposition[0]-1, myposition[1]-1]
-    #
-    #     return newposition
-
-    # def calcolateIpoteticPositionFR(self):
-    #     newposition = []
-    #     myposition = Memory.splitStringPosition (self.__myposition)
-    #     if self.__myorientation == 0:
-    #         newposition = [myposition[0]+1, myposition[1]+1]
-    #     elif self.__myorientation == 90:
-    #         newposition = [myposition[0]+1, myposition[1]-1]
-    #     elif self.__myorientation == 180:
-    #         newposition = [myposition[0]-1, myposition[1]-1]
-    #     elif self.__myorientation == 270:
-    #         newposition = [myposition[0]-1, myposition[1]+1]
-    #
-    #     return newposition
-
-    # def calcolateIpoteticPositionF(self):
-    #     newposition = []
-    #     myposition = Memory.splitStringPosition (self.__myposition)
-    #     if self.__myorientation == 0:
-    #         newposition = [myposition[0], myposition[1]+1]
-    #     elif self.__myorientation == 90:
-    #         newposition = [myposition[0]+1, myposition[1]]
-    #     elif self.__myorientation == 180:
-    #         newposition = [myposition[0], myposition[1]-1]
-    #     elif self.__myorientation == 270:
-    #         newposition = [myposition[0]-1, myposition[1]]
-    #
-    #     return newposition
-
-
-
-    # @staticmethod
-    # def indexOf(list, element, ymin, ymax):
-    #     for i in range(ymin, ymax):
-    #         if list[i] == element:
-    #             return i
-    #
-    #     return "Non trovato"
+        return False

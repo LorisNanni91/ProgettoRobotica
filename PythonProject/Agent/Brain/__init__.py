@@ -35,85 +35,76 @@ class Brain:
             if targetposition == None:
                 for i in range(len(positionArray)):
                     if positionArray[i][2] == "SHEEP":
+                        print(" sto calcolando il target ")
                         targetposition = self.useMemory().calcolateTarget(positionArray[i])
                         break
             if targetposition == None:
                 targetposition = self.useMemory().calcolateTarget(self.findNearestSheep(self.__memory.getMyPosition()))
 
-            print("TARGET POSITION: "+str(targetposition)) # target position
+            print("TARGET POSITION: "+str(targetposition)) #target position
 
-            #ho trovato il goal 1a fase, nell array c è pecora? se si punto quella pecora altrimenti dalla mia posizione cerco la pecora più vicina che ricordo, se non ne ricordo nessuna esploro
-            for i in range(len(positionArray)):
-                if positionArray[i][0] == targetposition[0] and positionArray[i][1] == targetposition[1]:
-                    positionArray[i][2] = "TARGET"
+            if targetposition != None:
+                for i in range(len(positionArray)):
+                    if positionArray[i][0] == targetposition[0] and positionArray[i][1] == targetposition[1]:
+                        positionArray[i][2] = "TARGET"
+
         fact = Brain.composeFact(positionArray)
         self.__memory.putFact(fact)
         self.__learning.learnNewFact(fact)
         print(fact)
         decisionarray = (self.__behaviour.takeDecision(factClass))
-        if len(decisionarray) > 0 and decisionarray != "Error":
-            decision = self.evaluateDecision(positionArray, decisionarray)
-            # decision = decisionarray[0]
-            print("questa è la decisione " + str(decisionarray))
+
+        print("prolog restituisce " + str (decisionarray))
+
+        if decisionarray != "Error":
+
+            if len(decisionarray) > 1:
+                decision = self.evaluateDecision(positionArray, decisionarray)
+                print("questa sono le decisioni " + str(decisionarray) + "e questa è quella scelta " + decision)
+
+            else:
+                decision = decisionarray[0]
+
             self.__memory.putDecision(decision)
-            #self.__memory.changeMyRotation()
+            self.__memory.setMyOrientation(self.__memory.calculateRotation())
             return decision
         else:
             return "Error"
 
     def evaluateDecision(self, positionArray, arraydecision):
+
         myposition = self.useMemory().getMyPosition()
         myorientation = self.useMemory().getMyOrientation()
         ipoteticposition = None
-        for i in range(len(arraydecision)):
-            if arraydecision[i] == "Forward":
-                ipoteticposition = self.calcolateIpoteticPositionF(myposition, myorientation)
-            elif arraydecision[i] == "Left":
-                ipoteticposition = self.calcolateIpoteticPositionL(myposition, myorientation)
-            elif arraydecision[i] == "Right":
-                ipoteticposition = self.calcolateIpoteticPositionR(myposition, myorientation)
-            elif arraydecision[i] == "Forward-Left":
-                ipoteticposition = self.calcolateIpoteticPositionFL(myposition, myorientation)
-            elif arraydecision[i] == "Forward-Right":
-                ipoteticposition = self.calcolateIpoteticPositionFR(myposition, myorientation)
 
-            if self.useMemory().getGoalPosition() != None:
-                elem = "SHEEP"
-                if elem not in positionArray:
-                    if self.isConvenient(ipoteticposition, myposition):
-                            return arraydecision[i]
-                else:
-                    return arraydecision[0]  # da rivedere
-            else:
-                if arraydecision[i] != 'Rotate-Back' and arraydecision[i] !='Rotate-Left' and arraydecision[i] != 'Rotate-Right':
-                    if self.__memory.getWorld()[ipoteticposition[0]][ipoteticposition[1]] == '0':
-                        return arraydecision[i]
-
-        return arraydecision[random.randint(0, len(arraydecision) - 1)]
-        # myposition = self.useMemory().getMyPosition()
-        # myorientation = self.useMemory().getMyOrientation()
+        # for i in range(len(arraydecision)):
         #
-        # if self.useMemory().getGoalPosition() != None:
-        #     elem = "SHEEP"
-        #     if elem not in positionArray:
-        #         for i in range(len(arraydecision)):
-        #             if arraydecision[i] == "Forward":
-        #                 ipoteticposition = self.calcolateIpoteticPositionF(myposition, myorientation)
-        #             elif arraydecision[i] == "Left":
-        #                 ipoteticposition = self.calcolateIpoteticPositionL(myposition, myorientation)
-        #             elif arraydecision[i] == "Right":
-        #                 ipoteticposition = self.calcolateIpoteticPositionR(myposition, myorientation)
-        #             elif arraydecision[i] == "Forward-Left":
-        #                 ipoteticposition = self.calcolateIpoteticPositionFL(myposition, myorientation)
-        #             elif arraydecision[i] == "Forward-Right":
-        #                 ipoteticposition = self.calcolateIpoteticPositionFR(myposition, myorientation)
+        #     if arraydecision[i] == "Forward":
+        #         ipoteticposition = self.calcolateIpoteticPositionF(myposition, myorientation)
+        #     elif arraydecision[i] == "Left":
+        #         ipoteticposition = self.calcolateIpoteticPositionL(myposition, myorientation)
+        #     elif arraydecision[i] == "Right":
+        #         ipoteticposition = self.calcolateIpoteticPositionR(myposition, myorientation)
+        #     elif arraydecision[i] == "Forward-Left":
+        #         ipoteticposition = self.calcolateIpoteticPositionFL(myposition, myorientation)
+        #     elif arraydecision[i] == "Forward-Right":
+        #         ipoteticposition = self.calcolateIpoteticPositionFR(myposition, myorientation)
         #
+        #     if self.useMemory().getGoalPosition() != None:
+        #         elem = "SHEEP"
+        #         #se ho trovato il goal, e non vedo una pecora, controllo la mia memoria e vedo se la decisione mi avvicina alla pecora più vicina a me
+        #         if not any(elem in x for x in positionArray):
         #             if self.isConvenient(ipoteticposition, myposition):
         #                 return arraydecision[i]
-        #     else:
-        #         return arraydecision[0] #da rivedere
         #
-        # return arraydecision[random.randint(0, len(arraydecision)-1)]
+        #     if arraydecision[i].split("-")[0] != "Rotate":
+        #         print("ci sono arrivato")
+        #         if self.__memory.recentlyVisited(ipoteticposition) == False:
+        #             # if self.__memory.getWorld()[ipoteticposition[0]][ipoteticposition[1]] != 'V':
+        #             return arraydecision[i]
+
+        print("decisione casuale")
+        return arraydecision[random.randint(0, len(arraydecision) - 1)]
 
     def isConvenient(self, ipoteticposition, myposition):
         sheepposition = self.findNearestSheep(myposition)
@@ -121,7 +112,7 @@ class Brain:
         currentdiffy = abs(int(sheepposition[1]) - int(myposition[1]))
         ipoteticdiffx = abs(int(sheepposition[0]) - ipoteticposition[0])
         ipoteticdiffy = abs(int(sheepposition[1]) - ipoteticposition[1])
-        if ipoteticdiffx <= currentdiffx + 1 and ipoteticdiffy <= currentdiffy +1:
+        if ipoteticdiffx <= currentdiffx + 1 and ipoteticdiffy <= currentdiffy + 1:
             return True
         else:
             return False
@@ -129,13 +120,18 @@ class Brain:
     def findNearestSheep(self, myposition):
         sheepposition = []
         raggio = 2
+        xmin = 0
+        xmax = 0
+        ymin = 0
+        ymax = 0
         #print(self.__world.index("SHEEP"))
         while sheepposition == []:
 
-            xmin = int(myposition[0]) - raggio if int(myposition[0]) - raggio >= 0  and int(myposition[0]) - raggio < self.__memory.getMyOrientation()[0] else int(myposition[0])
-            xmax = int(myposition[0]) + raggio if int(myposition[0]) + raggio >= 0  and int(myposition[0]) + raggio < self.__memory.getMyOrientation()[0] else int(myposition[0])
-            ymin = int(myposition[1]) - raggio if int(myposition[1]) - raggio >= 0  and int(myposition[1]) - raggio < self.__memory.getMyOrientation()[1] else int(myposition[1])
-            ymax = int(myposition[1]) + raggio if int(myposition[1]) + raggio >= 0  and int(myposition[1]) + raggio < self.__memory.getMyOrientation()[1] else int(myposition[1])
+
+            xmin = (int(myposition[0]) - raggio) if (((int(myposition[0]) - raggio) >= 0  and (int(myposition[0]) - raggio) < int(self.__memory.getPlaneSize()[0]))) else int(myposition[0])
+            xmax = (int(myposition[0]) + raggio) if (((int(myposition[0]) + raggio) >= 0  and (int(myposition[0]) + raggio) < int(self.__memory.getPlaneSize()[0]))) else int(myposition[0])
+            ymin = (int(myposition[1]) - raggio) if (((int(myposition[1]) - raggio) >= 0  and (int(myposition[1]) - raggio) < int(self.__memory.getPlaneSize()[1]))) else int(myposition[1])
+            ymax = (int(myposition[1]) + raggio) if (((int(myposition[1]) + raggio) >= 0  and (int(myposition[1]) + raggio) < int(self.__memory.getPlaneSize()[1]))) else int(myposition[1])
 
             for i in range(xmin, xmax+1):
 
@@ -215,7 +211,7 @@ class Brain:
 
     @staticmethod
     def indexOf(list, element, ymin, ymax):
-        for i in range (ymin, ymax):
+        for i in range(ymin, ymax):
             if list[i] == element:
                 return i
 
