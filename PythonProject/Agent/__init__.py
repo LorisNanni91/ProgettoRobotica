@@ -22,8 +22,8 @@ class Agent:
 
     def reaction(self, array):
 
-        sensorArray = self.__sensor.whatIsee(array)
-        self.__brain.useMemory().updateWorld(sensorArray)
+        sensorArray = self.__sensor.whatIsee(array)  # compongo l'array con le coordinate e il contenuto di ogni sensore
+        self.__brain.useMemory().updateWorld(sensorArray)  # in base a ciò che rilevo, aggiorno il mondo nella mia memoria
         decision = self.__brain.react(sensorArray, CONST_QUERY_FACT_CLASS)
 
         return decision
@@ -33,6 +33,8 @@ class Agent:
         if self.useBrain().useMemory().getGoalPosition() == None:
 
             self.useBrain().useMemory().setGoalPosition(position)
-            self.useBrain().useLearning().learnNewFact("goal('True')")
+            fact = "goal('True')"
+            self.useBrain().useMemory().putFact(fact)
+            self.useBrain().useLearning().learnNewFact(fact)
 
         return

@@ -1,5 +1,4 @@
-import random
-import sys
+NUM_LAST_POSITION = 3
 
 class Memory:
 
@@ -28,6 +27,7 @@ class Memory:
         return
 
     def calculateRotation(self):
+        # in base all'ultima decisione presa, calcolo di quanto devo ruotare
         decision = self.getLastDecision()
         rotation = 0
         if decision == "Rotate-Right":
@@ -42,15 +42,23 @@ class Memory:
         return self.__myposition
 
     def changeMyPosition(self, newposition):
+        # metto a vuoto la cella del mondo corrispondente alla mia posizione
         self.__world[int(self.__myposition[0])][int(self.__myposition[1])] = "EMPTY"
-        if len(self.__mylastpositions) == 3:
+
+        # se ho raggiunto le x posizioni da ricordare, devo rimuovere la più vecchia prima di inserire la nuova
+        if len(self.__mylastpositions) == NUM_LAST_POSITION:
             self.__mylastpositions.pop(0)
+
         self.__mylastpositions.append(self.__myposition)
+        # cambio la mia posizione in quella nuova
         self.__myposition = newposition
         self.__world[int(newposition[0])][int(newposition[1])] = "A"
+
+        # se ho raggiunto la posizione target, allora lo resetto
         if self.__targetposition != None:
             if int(self.__myposition[0]) == int(self.__targetposition[0]) and int(self.__myposition[1]) == int(self.__targetposition[1]):
                 self.__targetposition = None
+
         return
 
     def getGoalPosition(self):
@@ -74,9 +82,6 @@ class Memory:
     def getLastDecision(self):
         return self.__decisions[len(self.__decisions)-1]
 
-    # def getAllDecisions(self):
-    #     return self.__decisions
-
     def putDecision(self, decision):
         decision = str(decision)
         self.__decisions.append(decision)
@@ -86,22 +91,30 @@ class Memory:
         return self.__world
 
     def createWorld(self, planedimension):
+
+        # creo una lista di liste di 0 per il mondo nella memoria
         self.__planedim = planedimension
         self.__world = [[0] * int(planedimension[0]) for i in range(int(planedimension[1]))]
         self.changeMyPosition(self.__myposition)
         return
 
     def updateWorld(self, arraySensor):
+
         for i in range(len(arraySensor)):
-            if (int(arraySensor[i][0]) < 0 or int(arraySensor[i][1]) < 0 or int(arraySensor[i][0]) > int(self.__planedim[0]) - 1 or int(arraySensor[i][1]) > int(self.__planedim[1]) - 1):
+            # controllo se i sensori hanno rilevato una posizione che esce dal piano in quel caso la ignoro
+            if int(arraySensor[i][0]) < 0 or int(arraySensor[i][1]) < 0 or int(arraySensor[i][0]) > int(self.__planedim[0]) - 1 or int(arraySensor[i][1]) > int(self.__planedim[1]) - 1:
                 continue
+
             self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] = arraySensor[i][2]
         return
 
     def calcolateTarget(self, sheepposition):
+
+        # funzione per calcolare la posizione in cui il cane deve mettersi affinchè spinga la pecora correttamente
         deltax = int(sheepposition[0]) - int(self.__goalposition[0])
         deltay = int(sheepposition[1]) - int(self.__goalposition[1])
         delta = []
+
         if deltax > 0:
             delta.append('1')
         elif deltax < 0:
@@ -119,11 +132,13 @@ class Memory:
         targetpositionx = (int(sheepposition[0]) + int(delta[0])) if (int(sheepposition[0]) + int(delta[0])) < int(self.__planedim[0]) else int(sheepposition[0])
         targetpositiony = (int(sheepposition[1]) + int(delta[1])) if (int(sheepposition[1]) + int(delta[1])) < int(self.__planedim[1]) else int(sheepposition[1])
         targetposition = [targetpositionx, targetpositiony]
+
+        # controllo se la posizione del target è accessibile, altrimenti devo ricalcolarla
         if self.__world[int(targetposition[0])][int(targetposition[1])] == 'EMPTY' or self.__world[int(targetposition[0])][int(targetposition[1])] == '0':
             self.__targetposition = targetposition
         else:
+            # da vedere
             targetposition = 1
-            #da vedere
 
         return self.__targetposition
 
@@ -131,6 +146,8 @@ class Memory:
         return self.__targetposition
 
     def recentlyVisited(self, ipoteticposition):
+
+        # controllo se la posizione dove voglio andare è tra quelle visitate di recente
         for i in range(len(self.__mylastpositions)):
             if ipoteticposition[0] == self.__mylastpositions[i][0] and ipoteticposition[1] == self.__mylastpositions[i][1]:
                 return True

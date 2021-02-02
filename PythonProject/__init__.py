@@ -1,7 +1,7 @@
 import server as S
 import Agent
 
-#Message type separation
+#Message type separators
 TYPE_SEPARATOR = "|"
 INTERNAL_SEPARATOR = ","
 
@@ -18,22 +18,26 @@ dogposition = None
 
 moveCounter = 0
 
-while initialized == False:
+# ho bisogno di inizializzare l'agente prima di incominciare
+while not initialized:
 
-    data = S.sock.ReadReceivedData()# read data
+    data = S.sock.ReadReceivedData()  # read data
 
-    if data != None: # if NEW data has been received since last ReadReceivedData function call
+    if data != None:  # if NEW data has been received since last ReadReceivedData function call
         print( "primo ciclo " + data)
         array = data.split(TYPE_SEPARATOR)
 
         if array[0] == PLANE_SIZE:
             planedimension = array[1].split(INTERNAL_SEPARATOR)
+
         elif array[0] == DOG_POSITION:
             dogposition = array[1].split(INTERNAL_SEPARATOR)
+
         if planedimension != None and dogposition != None:
             initialized = True
 
 print("dimensione piano " + str(planedimension) + " posizione cane " + str(dogposition))
+# ho ricevuto da Unity i dati necessari quindi creo l'agente
 cane = Agent.Agent(dogposition, planedimension)
 
 
