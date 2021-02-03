@@ -33,6 +33,7 @@ public class Dog : MovableObjects
 
         //Debug.Log("Start coroutine dog, waiting " + waitForIstrucition);
 
+        yield return new WaitForSeconds(1f);
         this.dogSensorManager.UpdateSensor();
 
         // wait for unity updating sensors
@@ -61,6 +62,10 @@ public class Dog : MovableObjects
 
         ExecuteIstruction(istruction);
 
+        yield return new WaitForSeconds(1f);
+
+        this.PassMyTurn();
+
         yield return null;
 
     }
@@ -68,10 +73,6 @@ public class Dog : MovableObjects
 
     private void ExecuteIstruction(string message)
     {
-
-        //Debug.Log("Execute: " + message);
-
-        Debug.Log("MOVE N# " + this.movesCounter + ": " + message + " current position:" + this.transform.position);
 
 
         switch (message)
@@ -107,14 +108,14 @@ public class Dog : MovableObjects
              
         }
 
+        Debug.Log("MOVE N# " + this.movesCounter + ": " + message + " current position:" + this.transform.position);
+
         // reset boolean
         waitForIstrucition = false;
         newIstructionArrived = false;
 
         this.movesCounter++;
-        this.PassMyTurn();
 
-        StopAllCoroutines();
 
     }
 
