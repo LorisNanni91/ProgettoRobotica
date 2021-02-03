@@ -30,6 +30,8 @@ public class Dog : MovableObjects
 
     private IEnumerator DogTurn()
     {
+        // wait for unity updating sheeps
+        yield return new WaitForSeconds(1f);
 
         //Debug.Log("Start coroutine dog, waiting " + waitForIstrucition);
 

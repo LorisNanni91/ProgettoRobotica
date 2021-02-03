@@ -5,12 +5,12 @@ class Behaviour:
     def __init__(self, prolog):
         self.__prolog = prolog
 
-
     def takeDecision(self, factClass):
         factClass = factClass.replace('"', "'")
 
         try:
             decisions = list(self.__prolog.query(factClass))
+            print("ho deciso")
         except:
             decisions = "Error"
 
@@ -18,6 +18,8 @@ class Behaviour:
 
         for i in range(len(decisions)):
             decision = decisions[i]['X']
-            decisionarray.append(decision)
+
+            if decision not in decisionarray:
+                decisionarray.append(decision)
 
         return decisionarray

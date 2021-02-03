@@ -1,15 +1,25 @@
 class Learning:
-
     __prolog = None
 
     def __init__(self, prolog):
         self.__prolog = prolog
+        # all'inizio la classe goal vale false
+        self.learnNewFact("goal('False')", True)
 
-    def learnNewFact(self, fact):
-        factClass = fact.split("(")[0] + "(_,_,_,_,_,_,_,_,_,_,_)"
-        if factClass == "perception(_,_,_,_,_,_,_,_,_,_,_)":
+    def learnNewFact(self, fact, initialized=False):
+        if not initialized:  # se non sto inizializzando, devo svuotare il db prolog
+            factClass = fact.split("(")[0]
+
+            if factClass == "perception":
+                factClass += "(_,_,_,_,_,_,_,_,_,_,_)"
+
+            elif factClass == "goal":
+                factClass += "(_)"
+
             self.cleanPerception(factClass)
-        self.__prolog.assertz(str(fact))
+
+        print("fatto che sta imparando " + str(fact))
+        self.__prolog.assertz(str(fact))  # se sto inizializzando devo solo imparare il nuovo fatto
         return
 
     def learnFromFile(self, filepath):
