@@ -39,6 +39,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Vector3 PlaneSize
+    {
+        get
+        {
+            return plane.size;
+        }
+    }
+
     private int _counterType = 0;
 
     void Awake()
@@ -96,6 +104,10 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public static Vector3 IgnoreYofVector(Vector3 a)
+    {
+        return Vector3.Scale(a, new Vector3(1, 0, 1));
+    }
 
 
 }

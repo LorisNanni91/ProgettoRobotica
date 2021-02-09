@@ -104,7 +104,7 @@ public class SheepSensor : Sensor
 
             foreach(Vector3 corner in cornerOfRect)
             {
-                 bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == corner);
+                 bool isInList = this.obstacles.Exists(x => GameManager.IgnoreYofVector(x.transform.position) == corner);
 
                 if(!isInList)
                 {
@@ -131,11 +131,11 @@ public class SheepSensor : Sensor
 
         foreach(Vector3 rectValidPosition in cornerOfRect)
         {
-            bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == rectValidPosition);
+            bool isInList = this.obstacles.Exists(x => GameManager.IgnoreYofVector(x.transform.position) == rectValidPosition);
 
             if (!isInList)
             {
-                float distance = Vector3.Distance(this.IgnoreYofVector(dogPosition), rectValidPosition);
+                float distance = Vector3.Distance(GameManager.IgnoreYofVector(dogPosition), rectValidPosition);
                 allRectPoints.Add(rectValidPosition,distance);
 
             }
@@ -145,11 +145,11 @@ public class SheepSensor : Sensor
 
         foreach (Vector3 rectValidPosition in rectMiddlePoints)
         {
-            bool isInList = this.obstacles.Exists(x => this.IgnoreYofVector(x.transform.position) == rectValidPosition);
+            bool isInList = this.obstacles.Exists(x => GameManager.IgnoreYofVector(x.transform.position) == rectValidPosition);
 
             if (!isInList)
             {
-                float distance = Vector3.Distance(this.IgnoreYofVector(dogPosition), rectValidPosition);
+                float distance = Vector3.Distance(GameManager.IgnoreYofVector(dogPosition), rectValidPosition);
                 allRectPoints.Add(rectValidPosition, distance);
             }
 
@@ -193,9 +193,5 @@ public class SheepSensor : Sensor
         return this.mustMove;
     }
 
-    private Vector3 IgnoreYofVector(Vector3 a)
-    {
-        return Vector3.Scale(a,new Vector3(1,0,1));
-    }
 
 }
