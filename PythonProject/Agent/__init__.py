@@ -12,7 +12,7 @@ class Agent:
     def __init__(self, myposition, planedimension):
         self.__brain = Brain.Brain(myposition, planedimension)
         self.__sensor = Sensor.Sensor()
-        self.__brain.useLearning().learnFromFile("prolog.pl")
+        self.__brain.useLearning().learnFromFile("test.pl")
 
     def useBrain(self):
         return self.__brain

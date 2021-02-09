@@ -46,7 +46,7 @@ while i < 5:
 
     data = S.sock.ReadReceivedData()  # read data
     if data != None:
-        print(data)
+        # print(data)
         array = data.split(TYPE_SEPARATOR)
         if array[0] == DOG_SENSOR:
             decision = cane.reaction(array[1])

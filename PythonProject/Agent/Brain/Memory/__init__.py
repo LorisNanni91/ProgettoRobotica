@@ -1,3 +1,5 @@
+
+
 NUM_LAST_POSITION = 3
 
 class Memory:
@@ -76,11 +78,14 @@ class Memory:
 
     def putFact(self, fact):
         fact = str(fact)
-        self.__decisions.append(fact)
+        self.__facts.append(fact)
         return
 
     def getLastDecision(self):
-        return self.__decisions[len(self.__decisions)-1]
+        if len(self.__decisions) > 0:
+            return self.__decisions[len(self.__decisions)-1]
+        else:
+            return []
 
     def putDecision(self, decision):
         decision = str(decision)
@@ -108,6 +113,18 @@ class Memory:
             self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] = arraySensor[i][2]
         return
 
+    def getTargetPosition(self):
+        return self.__targetposition
+
+    def recentlyVisited(self, ipoteticposition):
+
+        # controllo se la posizione dove voglio andare è tra quelle visitate di recente
+        for i in range(len(self.__mylastpositions)):
+            if ipoteticposition[0] == self.__mylastpositions[i][0] and ipoteticposition[1] == self.__mylastpositions[i][1]:
+                return True
+
+        return False
+
     def calcolateTarget(self, sheepposition):
 
         # funzione per calcolare la posizione in cui il cane deve mettersi affinchè spinga la pecora correttamente
@@ -133,23 +150,116 @@ class Memory:
         targetpositiony = (int(sheepposition[1]) + int(delta[1])) if (int(sheepposition[1]) + int(delta[1])) < int(self.__planedim[1]) else int(sheepposition[1])
         targetposition = [targetpositionx, targetpositiony]
 
+        print('posizione pecora ' + str(sheepposition))
+        print("calcolata prima t" + str(targetposition))
+
         # controllo se la posizione del target è accessibile, altrimenti devo ricalcolarla
         if self.__world[int(targetposition[0])][int(targetposition[1])] == 'EMPTY' or self.__world[int(targetposition[0])][int(targetposition[1])] == '0':
             self.__targetposition = targetposition
         else:
-            # da vedere
-            targetposition = 1
+            # calcolo le due posizioni adiacenti
+            if delta[0] == 0:
+                if Memory.isInRange(int(targetposition[1]) + 1):
+                    firstPoss = [int(targetposition[0]), int(targetposition[1]) + 1]
+
+                if Memory.isInRange(int(targetposition[1]) - 1):
+                    secPoss = [int(targetposition[0]), int(targetposition[1]) - 1]
+            elif delta[1] == 0:
+                if Memory.isInRange (int(targetposition[0]) + 1):
+                    firstPoss = [int(targetposition[0]) + 1, int(targetposition[1])]
+                if Memory.isInRange (int(targetposition[0]) - 1):
+                    secPoss = [int(targetposition[0]) - 1, int(targetposition[1])]
+            else:
+                if Memory.isInRange (int(targetposition[0]) + int(delta[0])):
+                    firstPoss = [int(targetposition[0]) + int(delta[0]), int(targetposition[1])]
+                if Memory.isInRange (int(targetposition[1]) + int(delta[1])):
+                    secPoss = [int(targetposition[0]), int(targetposition[1]) + int(delta[1])]
+
+            print ("calcolata first t" + str (firstPoss))
+            print ("calcolata sec t" + str (secPoss))
+
+            # controllo se le posizioni calcolate sono libere, altrimenti ritorno None
+            if self.__world[int(firstPoss[0])][int(firstPoss[1])] == 'EMPTY' or self.__world[int(firstPoss[0])][int(firstPoss[1])] == '0':
+                return firstPoss
+            elif self.__world[int(secPoss[0])][int(secPoss[1])] == 'EMPTY' or self.__world[int(secPoss[0])][int(secPoss[1])] == '0':
+                return secPoss
+            else:
+                return None
+
+
 
         return self.__targetposition
 
-    def getTargetPosition(self):
-        return self.__targetposition
+    def calcolateIpoteticPositionF(self):
+        newposition = []
+        if self.__myorientation == 0:
+            newposition = [int(self.__myposition[0]), int(self.__myposition[1]) + 1]
+        elif self.__myorientation == 90:
+            newposition = [int(self.__myposition[0]) + 1, int(self.__myposition[1])]
+        elif self.__myorientation == 180:
+            newposition = [int(self.__myposition[0]), int(self.__myposition[1]) - 1]
+        elif self.__myorientation == 270:
+            newposition = [int(self.__myposition[0]) - 1, int(self.__myposition[1])]
 
-    def recentlyVisited(self, ipoteticposition):
+        return newposition
 
-        # controllo se la posizione dove voglio andare è tra quelle visitate di recente
-        for i in range(len(self.__mylastpositions)):
-            if ipoteticposition[0] == self.__mylastpositions[i][0] and ipoteticposition[1] == self.__mylastpositions[i][1]:
-                return True
+    def calcolateIpoteticPositionFR(self):
+        newposition = []
+        if self.__myorientation == 0:
+            newposition = [int(self.__myposition[0]) + 1, int(self.__myposition[1]) + 1]
+        elif self.__myorientation == 90:
+            newposition = [int(self.__myposition[0]) + 1, int(self.__myposition[1]) - 1]
+        elif self.__myorientation == 180:
+            newposition = [int(self.__myposition[0]) - 1, int(self.__myposition[1]) - 1]
+        elif self.__myorientation == 270:
+            newposition = [int(self.__myposition[0]) - 1, int(self.__myposition[1]) + 1]
 
+        return newposition
+
+    def calcolateIpoteticPositionFL(self):
+        newposition = []
+        if self.__myorientation == 0:
+            newposition = [int(self.__myposition[0]) - 1, int(self.__myposition[1]) + 1]
+        elif self.__myorientation == 90:
+            newposition = [int(self.__myposition[0]) + 1, int(self.__myposition[1]) + 1]
+        elif self.__myorientation == 180:
+            newposition = [int(self.__myposition[0]) + 1, int(self.__myposition[1]) - 1]
+        elif self.__myorientation == 270:
+            newposition = [int(self.__myposition[0]) - 1, int(self.__myposition[1]) - 1]
+
+        return newposition
+
+    def calcolateIpoteticPositionR(self):
+        newposition = []
+        if self.__myorientation == 0:
+            newposition = [int(self.__myposition[0]) + 1, int(self.__myposition[1])]
+        elif self.__myorientation == 90:
+            newposition = [int(self.__myposition[0]), int(self.__myposition[1]) - 1]
+        elif self.__myorientation == 180:
+            newposition = [int(self.__myposition[0]) - 1, int(self.__myposition[1])]
+        elif self.__myorientation == 270:
+            newposition = [int(self.__myposition[0]), int(self.__myposition[1]) + 1]
+
+        return newposition
+
+    def calcolateIpoteticPositionL(self):
+        newposition = []
+        if self.__myorientation == 0:
+            newposition = [int(self.__myposition[0]) - 1, int(self.__myposition[1])]
+        elif self.__myorientation == 90:
+            newposition = [int(self.__myposition[0]), int(self.__myposition[1]) + 1]
+        elif self.__myorientation == 180:
+            newposition = [int(self.__myposition[0]) + 1, int(self.__myposition[1])]
+        elif self.__myorientation == 270:
+            newposition = [int(self.__myposition[0]), int(self.__myposition[1]) - 1]
+
+        return newposition
+
+
+    @staticmethod
+    def isInRange(numero):
+        if numero >= 0 and numero <= 9:
+            return True
         return False
+
+

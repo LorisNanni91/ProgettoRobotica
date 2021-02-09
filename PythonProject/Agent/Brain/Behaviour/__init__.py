@@ -10,7 +10,6 @@ class Behaviour:
 
         try:
             decisions = list(self.__prolog.query(factClass))
-            print("ho deciso")
         except:
             decisions = "Error"
 
