@@ -110,7 +110,7 @@ class Memory:
 
     def initializeQuadranti(self):
         # si assume che le dimensioni del piano siano pari
-        quadrante = (self.__planedim[0]/2) * (self.__planedim[1]/2)
+        quadrante = (int(int(self.__planedim[0]))/2) * (int(int(self.__planedim[1]))/2)
         for i in range(0, 4):
             self.__quadranti.append(quadrante)
         self.__valoresoglia = quadrante / SOGLIA_MIN
@@ -125,13 +125,13 @@ class Memory:
         return self.__quadranti
 
     def calcolateQuadrante(self, vettore):
-        if vettore[0] < (self.__planedim[0]/2) and vettore[1] < (self.__planedim[1]):
+        if int(vettore[0]) < (int(self.__planedim[0])/2) and int(vettore[1]) < (int(self.__planedim[1])):
             return 2
-        elif vettore[0] >= (self.__planedim[0]/2) and vettore[1] >= (self.__planedim[1]):
+        elif int(vettore[0]) >= (int(self.__planedim[0])/2) and int(vettore[1]) >= (int(self.__planedim[1])):
             return 0
-        elif vettore[0] < (self.__planedim[0]/2) and vettore[1] >= (self.__planedim[1]):
+        elif int(vettore[0]) < (int(self.__planedim[0])/2) and int(vettore[1]) >= (int(self.__planedim[1])):
             return 1
-        elif vettore[0] >= (self.__planedim[0]/2) and vettore[1] < (self.__planedim[1]):
+        elif int(vettore[0]) >= (int(self.__planedim[0])/2) and int(vettore[1]) < (int(self.__planedim[1])):
             return 3
 
     def getSoglia(self):
@@ -148,21 +148,21 @@ class Memory:
         quandranteinesplorato = self.getInesplorateQuadrante()
 
         if quandranteinesplorato == 0:
-            x = math.pow((int(self.__planedim[0])-1) - int(self.__myposition[0]), 2)
-            y = math.pow ((int (self.__planedim[1]) - 1) - int(self.__myposition[1]), 2)
+            x = math.pow((int(int(self.__planedim[0]))-1) - int(self.__myposition[0]), 2)
+            y = math.pow ((int (int(self.__planedim[1])) - 1) - int(self.__myposition[1]), 2)
             deltaattuale = math.sqrt(y + x)
 
-            x = math.pow ((int (self.__planedim[0]) - 1) - int(ipoteticposition[0]), 2)
-            y = math.pow ((int (self.__planedim[1]) - 1) - int(ipoteticposition[1]), 2)
+            x = math.pow ((int (int(self.__planedim[0])) - 1) - int(ipoteticposition[0]), 2)
+            y = math.pow ((int (int(self.__planedim[1])) - 1) - int(ipoteticposition[1]), 2)
             deltaipotetico = math.sqrt (y + x)
 
         elif quandranteinesplorato == 1:
             x = math.pow (0 - int (self.__myposition[0]), 2)
-            y = math.pow ((int (self.__planedim[1]) - 1) - int (self.__myposition[1]), 2)
+            y = math.pow ((int (int(self.__planedim[1])) - 1) - int (self.__myposition[1]), 2)
             deltaattuale = math.sqrt (y + x)
 
             x = math.pow (0 - int (ipoteticposition[0]), 2)
-            y = math.pow ((int (self.__planedim[1]) - 1) - int (ipoteticposition[1]), 2)
+            y = math.pow ((int (int(self.__planedim[1])) - 1) - int (ipoteticposition[1]), 2)
             deltaipotetico = math.sqrt (y + x)
 
         elif quandranteinesplorato == 2:
@@ -175,11 +175,11 @@ class Memory:
             deltaipotetico = math.sqrt (y + x)
 
         elif quandranteinesplorato == 3:
-            x = math.pow ((int (self.__planedim[0]) - 1) - int (self.__myposition[0]), 2)
+            x = math.pow ((int (int(self.__planedim[0])) - 1) - int (self.__myposition[0]), 2)
             y = math.pow (0 - int (self.__myposition[1]), 2)
             deltaattuale = math.sqrt (y + x)
 
-            x = math.pow ((int (self.__planedim[0]) - 1) - int (ipoteticposition[0]), 2)
+            x = math.pow ((int (int(self.__planedim[0])) - 1) - int (ipoteticposition[0]), 2)
             y = math.pow (0 - int (ipoteticposition[1]), 2)
             deltaipotetico = math.sqrt (y + x)
 
@@ -193,7 +193,7 @@ class Memory:
 
         for i in range(len(arraySensor)):
             # controllo se i sensori hanno rilevato una posizione che esce dal piano in quel caso la ignoro
-            if int(arraySensor[i][0]) < 0 or int(arraySensor[i][1]) < 0 or int(arraySensor[i][0]) > int(self.__planedim[0]) - 1 or int(arraySensor[i][1]) > int(self.__planedim[1]) - 1:
+            if int(arraySensor[i][0]) < 0 or int(arraySensor[i][1]) < 0 or int(arraySensor[i][0]) > int(int(self.__planedim[0])) - 1 or int(arraySensor[i][1]) > int(int(self.__planedim[1])) - 1:
                 continue
             if self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] == '0':
                 vettore = [int(arraySensor[i][0]), int(arraySensor[i][1])]
@@ -234,8 +234,8 @@ class Memory:
         elif deltay == 0:
             delta.append('0')
 
-        targetpositionx = (int(sheepposition[0]) + int(delta[0])) if (int(sheepposition[0]) + int(delta[0])) < int(self.__planedim[0]) else int(sheepposition[0])
-        targetpositiony = (int(sheepposition[1]) + int(delta[1])) if (int(sheepposition[1]) + int(delta[1])) < int(self.__planedim[1]) else int(sheepposition[1])
+        targetpositionx = (int(sheepposition[0]) + int(delta[0])) if (int(sheepposition[0]) + int(delta[0])) < int(int(self.__planedim[0])) else int(sheepposition[0])
+        targetpositiony = (int(sheepposition[1]) + int(delta[1])) if (int(sheepposition[1]) + int(delta[1])) < int(int(self.__planedim[1])) else int(sheepposition[1])
         targetposition = [targetpositionx, targetpositiony]
 
         print('posizione pecora ' + str(sheepposition))

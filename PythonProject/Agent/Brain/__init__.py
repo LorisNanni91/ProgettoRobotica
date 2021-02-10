@@ -115,8 +115,8 @@ class Brain:
                 if decision.split("-")[0] != "Rotate":
                     indicequadranteattuale = self.useMemory().calcolateQuadrante(self.useMemory().getMyPosition())
                     indicequadrante = self.useMemory().calcolateQuadrante(ipoteticposition)
+                    quadranti = self.useMemory().getQuadrante()
                     if indicequadrante != indicequadranteattuale:
-                        quadranti = self.useMemory().getQuadrante()
                         # se i punti da esplorare nella mia zona sono meno della soglia, e a l altra zona ha più punti inesplorati, ritorno la decisione
                         if quadranti[indicequadranteattuale] <= self.useMemory().getSoglia() and quadranti[indicequadrante] > quadranti[indicequadranteattuale]:
                             return decision
