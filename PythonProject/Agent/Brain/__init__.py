@@ -41,27 +41,8 @@ class Brain:
                     if int(positionArray[i][0]) == int(targetposition[0]) \
                             and int(positionArray[i][1]) == int(targetposition[1]):
                         if positionArray[i][2] == 'EMPTY':
-                            positionArray[i][2] = "TARGET"
+                            positionArray[i][2] = 'TARGET'
                         break
-
-            # targetposition = self.useMemory().getTargetPosition()
-            #
-            # if targetposition == None:
-            #     for i in range(len(positionArray)):
-            #         if positionArray[i][2] == "SHEEP":
-            #             print(" sto calcolando il target ")
-            #             targetposition = self.useMemory().calcolateTarget(positionArray[i])
-            #             break
-            # if targetposition == None:
-            #     targetposition = self.useMemory().calcolateTarget(self.findNearestSheep(self.__memory.getMyPosition()))
-            #
-            # print("TARGET POSITION: "+str(targetposition)) #target position
-            #
-            # if targetposition != None:
-            #     for i in range(len(positionArray)):
-            #         if int(positionArray[i][0]) == int(targetposition[0]) and int(positionArray[i][1]) == int(targetposition[1]):
-            #             positionArray[i][2] = "TARGET"
-            #             break
 
         # compongo e imparo nuovo fatto
         fact = Brain.composeFact(positionArray)
@@ -132,42 +113,28 @@ class Brain:
             else:
                 # non ho trovato il goal, scelgo la decisione se mi avvicina a una zona non visitata
                 if decision.split("-")[0] != "Rotate":
+                    indicequadranteattuale = self.useMemory().calcolateQuadrante(self.useMemory().getMyPosition())
+                    indicequadrante = self.useMemory().calcolateQuadrante(ipoteticposition)
+                    if indicequadrante != indicequadranteattuale:
+                        quadranti = self.useMemory().getQuadrante()
+                        # se i punti da esplorare nella mia zona sono meno della soglia, e a l altra zona ha più punti inesplorati, ritorno la decisione
+                        if quadranti[indicequadranteattuale] <= self.useMemory().getSoglia() and quadranti[indicequadrante] > quadranti[indicequadranteattuale]:
+                            return decision
 
-                    if not self.__memory.recentlyVisited(ipoteticposition):
-                        # if self.__memory.getWorld()[ipoteticposition[0]][ipoteticposition[1]] != 'V':
+                    elif quadranti[indicequadranteattuale] > self.useMemory().getSoglia():
                         return decision
+
+                    elif self.useMemory().nearInesplorate(ipoteticposition):
+                        return decision
+
+                    # if self.useMemory().getQuadrante()[indicequadrante]
+                    # # if self.isConvenient(ipoteticposition, myposition, self.useMemory().getQuadrante(ipoteticposition))
+                    # if not self.__memory.recentlyVisited(ipoteticposition):
+                    #     # if self.__memory.getWorld()[ipoteticposition[0]][ipoteticposition[1]] != 'V':
+                    #     return decision
 
         # nessuna scelta sembra essere valida, scegliamo a caso
         return arraydecision[random.randint(0, len(arraydecision) - 1)]
-
-        # for i in range(len(arraydecision)):
-        #
-        #     if arraydecision[i] == "Forward":
-        #         ipoteticposition = self.__memory.calcolateIpoteticPositionF(myposition, myorientation)
-        #     elif arraydecision[i] == "Left":
-        #         ipoteticposition = self.__memory.calcolateIpoteticPositionL(myposition, myorientation)
-        #     elif arraydecision[i] == "Right":
-        #         ipoteticposition = self.__memory.calcolateIpoteticPositionR(myposition, myorientation)
-        #     elif arraydecision[i] == "Forward-Left":
-        #         ipoteticposition = self.__memory.calcolateIpoteticPositionFL(myposition, myorientation)
-        #     elif arraydecision[i] == "Forward-Right":
-        #         ipoteticposition = self.__memory.calcolateIpoteticPositionFR(myposition, myorientation)
-        #
-        #     if self.useMemory().getGoalPosition() != None:
-        #         elem = "SHEEP"
-        #         #se ho trovato il goal, e non vedo una pecora, controllo la mia memoria e vedo se la decisione mi avvicina alla pecora più vicina a me
-        #         if not any(elem in x for x in positionArray):
-        #             if self.isConvenient(ipoteticposition, myposition):
-        #                 return arraydecision[i]
-        #
-        #     if arraydecision[i].split("-")[0] != "Rotate":
-        #         print("ci sono arrivato")
-        #         if self.__memory.recentlyVisited(ipoteticposition) == False:
-        #             # if self.__memory.getWorld()[ipoteticposition[0]][ipoteticposition[1]] != 'V':
-        #             return arraydecision[i]
-        #
-        # print("decisione casuale")
-        # return arraydecision[random.randint(0, len(arraydecision) - 1)]
 
     def isConvenient(self, ipoteticposition, myposition, targetposition=None):
 
@@ -209,7 +176,7 @@ class Brain:
 
             for i in range(xmin, xmax + 1):
 
-                y = Brain.indexOf(self.__memory.getWorld()[i], "SHEEP", ymin, ymax)
+                y = Brain.indexOf(self.__memory.getWorld()[i], 'SHEEP', ymin, ymax)
 
                 if y != NOT_FOUND:
                     sheepposition.append(i)

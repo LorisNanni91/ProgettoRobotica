@@ -1,6 +1,7 @@
-
-
 NUM_LAST_POSITION = 3
+SOGLIA_MIN = 3
+
+import math
 
 class Memory:
 
@@ -13,6 +14,9 @@ class Memory:
     __planedim = None
     __targetposition = None
     __mylastpositions = []
+    # quandranti: 0 [6,6-9,9], 1 [0,6-5,9], 2 [0,0-5,5], 3 [6,0-9,5]
+    __quadranti = []
+    __valoresoglia = None
 
     def __init__(self, myposition, planedimension):
         self.__decisions = []
@@ -20,6 +24,7 @@ class Memory:
         self.__myposition = myposition
         self.__myorientation = 0
         self.createWorld(planedimension)
+        self.initializeQuadranti()
 
     def getMyOrientation(self):
         return self.__myorientation
@@ -45,7 +50,7 @@ class Memory:
 
     def changeMyPosition(self, newposition):
         # metto a vuoto la cella del mondo corrispondente alla mia posizione
-        self.__world[int(self.__myposition[0])][int(self.__myposition[1])] = "EMPTY"
+        self.__world[int(self.__myposition[0])][int(self.__myposition[1])] = 'EMPTY'
 
         # se ho raggiunto le x posizioni da ricordare, devo rimuovere la più vecchia prima di inserire la nuova
         if len(self.__mylastpositions) == NUM_LAST_POSITION:
@@ -103,13 +108,96 @@ class Memory:
         self.changeMyPosition(self.__myposition)
         return
 
+    def initializeQuadranti(self):
+        # si assume che le dimensioni del piano siano pari
+        quadrante = (self.__planedim[0]/2) * (self.__planedim[1]/2)
+        for i in range(0, 4):
+            self.__quadranti.append(quadrante)
+        self.__valoresoglia = quadrante / SOGLIA_MIN
+        return
+
+    def updateQuadranti(self, vettore):
+        indice = self.calcolateQuadrante(vettore)
+        self.__quadranti[indice] -= 1
+        return
+
+    def getQuadrante(self):
+        return self.__quadranti
+
+    def calcolateQuadrante(self, vettore):
+        if vettore[0] < (self.__planedim[0]/2) and vettore[1] < (self.__planedim[1]):
+            return 2
+        elif vettore[0] >= (self.__planedim[0]/2) and vettore[1] >= (self.__planedim[1]):
+            return 0
+        elif vettore[0] < (self.__planedim[0]/2) and vettore[1] >= (self.__planedim[1]):
+            return 1
+        elif vettore[0] >= (self.__planedim[0]/2) and vettore[1] < (self.__planedim[1]):
+            return 3
+
+    def getSoglia(self):
+        return self.__valoresoglia
+
+    def getInesplorateQuadrante(self):
+        min = 0
+        for i in range(1, len(self.__quadranti)):
+            if self.__quadranti[i] < self.__quadranti[min]:
+                min = i
+        return min
+
+    def nearInesplorate(self, ipoteticposition):
+        quandranteinesplorato = self.getInesplorateQuadrante()
+
+        if quandranteinesplorato == 0:
+            x = math.pow((int(self.__planedim[0])-1) - int(self.__myposition[0]), 2)
+            y = math.pow ((int (self.__planedim[1]) - 1) - int(self.__myposition[1]), 2)
+            deltaattuale = math.sqrt(y + x)
+
+            x = math.pow ((int (self.__planedim[0]) - 1) - int(ipoteticposition[0]), 2)
+            y = math.pow ((int (self.__planedim[1]) - 1) - int(ipoteticposition[1]), 2)
+            deltaipotetico = math.sqrt (y + x)
+
+        elif quandranteinesplorato == 1:
+            x = math.pow (0 - int (self.__myposition[0]), 2)
+            y = math.pow ((int (self.__planedim[1]) - 1) - int (self.__myposition[1]), 2)
+            deltaattuale = math.sqrt (y + x)
+
+            x = math.pow (0 - int (ipoteticposition[0]), 2)
+            y = math.pow ((int (self.__planedim[1]) - 1) - int (ipoteticposition[1]), 2)
+            deltaipotetico = math.sqrt (y + x)
+
+        elif quandranteinesplorato == 2:
+            x = math.pow (0 - int (self.__myposition[0]), 2)
+            y = math.pow (0 - int (self.__myposition[1]), 2)
+            deltaattuale = math.sqrt (y + x)
+
+            x = math.pow (0 - int (ipoteticposition[0]), 2)
+            y = math.pow (0 - int (ipoteticposition[1]), 2)
+            deltaipotetico = math.sqrt (y + x)
+
+        elif quandranteinesplorato == 3:
+            x = math.pow ((int (self.__planedim[0]) - 1) - int (self.__myposition[0]), 2)
+            y = math.pow (0 - int (self.__myposition[1]), 2)
+            deltaattuale = math.sqrt (y + x)
+
+            x = math.pow ((int (self.__planedim[0]) - 1) - int (ipoteticposition[0]), 2)
+            y = math.pow (0 - int (ipoteticposition[1]), 2)
+            deltaipotetico = math.sqrt (y + x)
+
+        if deltaipotetico <= deltaattuale:
+            return True
+        else:
+            return False
+
+
     def updateWorld(self, arraySensor):
 
         for i in range(len(arraySensor)):
             # controllo se i sensori hanno rilevato una posizione che esce dal piano in quel caso la ignoro
             if int(arraySensor[i][0]) < 0 or int(arraySensor[i][1]) < 0 or int(arraySensor[i][0]) > int(self.__planedim[0]) - 1 or int(arraySensor[i][1]) > int(self.__planedim[1]) - 1:
                 continue
-
+            if self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] == '0':
+                vettore = [int(arraySensor[i][0]), int(arraySensor[i][1])]
+                self.updateQuadranti(vettore)
             self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] = arraySensor[i][2]
         return
 
@@ -154,7 +242,7 @@ class Memory:
         print("calcolata prima t" + str(targetposition))
 
         # controllo se la posizione del target è accessibile, altrimenti devo ricalcolarla
-        if self.__world[int(targetposition[0])][int(targetposition[1])] == 'EMPTY' or self.__world[int(targetposition[0])][int(targetposition[1])] == '0':
+        if self.__world[int(targetposition[0])][int(targetposition[1])] == 'EMPTY':
             self.__targetposition = targetposition
         else:
             # calcolo le due posizioni adiacenti
@@ -179,12 +267,20 @@ class Memory:
             print ("calcolata sec t" + str (secPoss))
 
             # controllo se le posizioni calcolate sono libere, altrimenti ritorno None
-            if self.__world[int(firstPoss[0])][int(firstPoss[1])] == 'EMPTY' or self.__world[int(firstPoss[0])][int(firstPoss[1])] == '0':
+            if self.__world[int(firstPoss[0])][int(firstPoss[1])] == 'EMPTY':
                 return firstPoss
-            elif self.__world[int(secPoss[0])][int(secPoss[1])] == 'EMPTY' or self.__world[int(secPoss[0])][int(secPoss[1])] == '0':
+            elif self.__world[int(secPoss[0])][int(secPoss[1])] == 'EMPTY':
                 return secPoss
             else:
-                return None
+                ipoteticposition = self.calcolateIpoteticPositionF()
+                if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == 'EMPTY':
+                    return ipoteticposition
+                ipoteticposition = self.calcolateIpoteticPositionFL()
+                if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == 'EMPTY':
+                    return ipoteticposition
+                ipoteticposition = self.calcolateIpoteticPositionFR()
+                if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == 'EMPTY':
+                    return ipoteticposition
 
 
 
