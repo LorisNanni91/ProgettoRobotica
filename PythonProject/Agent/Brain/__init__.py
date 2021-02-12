@@ -38,8 +38,8 @@ class Brain:
 
             if targetposition is not None:
                 for i in range(len(positionArray)):
-                    if int(positionArray[i][0]) == int(targetposition[0]) \
-                            and int(positionArray[i][1]) == int(targetposition[1]):
+                    if int(positionArray[i][0]) == targetposition[0] \
+                            and int(positionArray[i][1]) == targetposition[1]:
                         if positionArray[i][2] == 'EMPTY':
                             positionArray[i][2] = 'TARGET'
                         break
