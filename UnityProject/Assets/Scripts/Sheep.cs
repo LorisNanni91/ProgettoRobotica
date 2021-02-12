@@ -41,17 +41,4 @@ public class Sheep : MovableObjects
         transform.position = newPosition;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Objects goal = other.GetComponent<Objects>();
-
-        if(goal!=null && goal.type == OBJECTSTYPE.GOAL)
-        {
-            GameManager.GameManagerInstance.SendSensorMessage(MessageType.GOAL_REACHED,"una pecora in meno");
-
-            // disable sheep
-            this.transform.parent.gameObject.SetActive(false);
-        }
-
-    }
 }
