@@ -78,9 +78,11 @@ class Brain:
         while len(copydecision) > 0:
             decision = copydecision.pop(random.randint(0, len(copydecision) - 1))
 
-            if self.__memory.getLastDecision() != []:
+            if self.__memory.getLastDecision() != None:
                 if decision.split("-")[0] == "Rotate" and self.__memory.getLastDecision().split("-")[0] == "Rotate":
                     continue
+            if decision.split("-")[0] == "Rotate" and self.useMemory().getSheepViewed() and self.useMemory().getGoalPosition() != None:
+                continue
 
             if decision == "Forward":
                 ipoteticposition = self.__memory.calcolateIpoteticPositionF( )
@@ -122,6 +124,7 @@ class Brain:
                             return decision
 
                     elif quadranti[indicequadranteattuale] > self.useMemory().getSoglia():
+                        # se è lo stesso quadrante e non l'ho esplorato a sufficienza ritorno la decisione
                         return decision
 
                     elif self.useMemory().nearInesplorate(ipoteticposition):

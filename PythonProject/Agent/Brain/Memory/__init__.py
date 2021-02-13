@@ -1,5 +1,5 @@
 NUM_LAST_POSITION = 3
-SOGLIA_MIN = 3
+SOGLIA_MIN = 2
 
 import math
 
@@ -17,6 +17,7 @@ class Memory:
     # quandranti: 0 [6,6-9,9], 1 [0,6-5,9], 2 [0,0-5,5], 3 [6,0-9,5]
     __quadranti = []
     __valoresoglia = None
+    __sheepviewed = False
 
     def __init__(self, myposition, planedimension):
         self.__decisions = []
@@ -90,7 +91,7 @@ class Memory:
         if len(self.__decisions) > 0:
             return self.__decisions[len(self.__decisions)-1]
         else:
-            return []
+            return None
 
     def putDecision(self, decision):
         decision = str(decision)
@@ -126,24 +127,24 @@ class Memory:
 
     def calcolateQuadrante(self, vettore):
         # da ragionarci?
-        if int(vettore[0]) < int(self.__planedim[0]/2) and int(vettore[1]) < self.__planedim[1]:
+        if int(vettore[0]) < int(self.__planedim[0]/2) and int(vettore[1]) < int(self.__planedim[1]/2):
             return 2
-        elif int(vettore[0]) >= int(self.__planedim[0]/2) and int(vettore[1]) >= self.__planedim[1]:
+        elif int(vettore[0]) >= int(self.__planedim[0]/2) and int(vettore[1]) >= int(self.__planedim[1]/2):
             return 0
-        elif int(vettore[0]) < int(self.__planedim[0]/2) and int(vettore[1]) >= self.__planedim[1]:
+        elif int(vettore[0]) < int(self.__planedim[0]/2) and int(vettore[1]) >= int(self.__planedim[1]/2):
             return 1
-        elif int(vettore[0]) >= int(self.__planedim[0]/2) and int(vettore[1]) < self.__planedim[1]:
+        elif int(vettore[0]) >= int(self.__planedim[0]/2) and int(vettore[1]) < int(self.__planedim[1]/2):
             return 3
 
     def getSoglia(self):
         return self.__valoresoglia
 
     def getInesplorateQuadrante(self):
-        min = 0
+        max = 0
         for i in range(1, len(self.__quadranti)):
-            if self.__quadranti[i] < self.__quadranti[min]:
-                min = i
-        return min
+            if self.__quadranti[i] > self.__quadranti[max]:
+                max = i
+        return max
 
     def nearInesplorate(self, ipoteticposition):
         quandranteinesplorato = self.getInesplorateQuadrante()
@@ -194,6 +195,8 @@ class Memory:
 
     def updateWorld(self, arraySensor):
 
+        self.__sheepviewed = False
+
         for i in range(len(arraySensor)):
             # controllo se i sensori hanno rilevato una posizione che esce dal piano in quel caso la ignoro
             if int(arraySensor[i][0]) < 0 or int(arraySensor[i][1]) < 0 or int(arraySensor[i][0]) > self.__planedim[0] - 1 or int(arraySensor[i][1]) > self.__planedim[1] - 1:
@@ -201,20 +204,25 @@ class Memory:
             if self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] == 0:
                 vettore = [int(arraySensor[i][0]), int(arraySensor[i][1])]
                 self.updateQuadranti(vettore)
+            if arraySensor[i][2] == 'SHEEP':
+                self.__sheepviewed = True
             self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] = arraySensor[i][2]
         return
 
     def getTargetPosition(self):
         return self.__targetposition
 
-    def recentlyVisited(self, ipoteticposition):
+    def getSheepViewed(self):
+        return self.__sheepviewed
 
-        # controllo se la posizione dove voglio andare è tra quelle visitate di recente
-        for i in range(len(self.__mylastpositions)):
-            if int(ipoteticposition[0]) == self.__mylastpositions[i][0] and int(ipoteticposition[1]) == self.__mylastpositions[i][1]:
-                return True
-
-        return False
+    # def recentlyVisited(self, ipoteticposition):
+    #
+    #     # controllo se la posizione dove voglio andare è tra quelle visitate di recente
+    #     for i in range(len(self.__mylastpositions)):
+    #         if int(ipoteticposition[0]) == self.__mylastpositions[i][0] and int(ipoteticposition[1]) == self.__mylastpositions[i][1]:
+    #             return True
+    #
+    #     return False
 
     def calcolateTarget(self, sheepposition):
 
@@ -266,8 +274,8 @@ class Memory:
                 if Memory.isInRange(targetposition[1] + delta[1]):
                     secPoss = [targetposition[0], targetposition[1] + delta[1]]
 
-            print ("calcolata first t" + str (firstPoss))
-            print ("calcolata sec t" + str (secPoss))
+            # print ("calcolata first t" + str (firstPoss))
+            # print ("calcolata sec t" + str (secPoss))
 
             # controllo se le posizioni calcolate sono libere, altrimenti ritorno None
             if self.__world[int(firstPoss[0])][int(firstPoss[1])] == 'EMPTY':
