@@ -79,7 +79,19 @@ public class SheepSensor : Sensor
         Vector3 delta = transform.position - dog.transform.position;
 
         SetNextPosition(transform.position + delta);
-        CheckObstacles(dog.transform.position);
+
+        bool isInList = this.obstacles.Exists(x => GameManager.IgnoreYofVector(x.transform.position) == GameManager.IgnoreYofVector(this.nextPosition));
+
+        // if there is an obstacle on next position calculed, recalculate position
+        if (isInList)
+        {
+            CheckObstacles(dog.transform.position);
+        }
+        else
+        {
+            this.nextPositionCalculated = true;
+        }
+
     }
 
     private void CheckObstacles(Vector3 dogPosition)
