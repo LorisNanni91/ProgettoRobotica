@@ -15,6 +15,8 @@ public class SheepsManager : MonoBehaviour
     [SerializeField]
     private GameObject prefabSheep;
 
+    private bool moving = false;
+
     private void Awake()
     {
         //sheeps = FindObjectsOfType<Sheep>();
@@ -66,15 +68,25 @@ public class SheepsManager : MonoBehaviour
 
     private void Update()
     {
-        if(sheeps[0].IsSheepsTurn)
+        if(sheeps[0].IsSheepsTurn && !this.moving)
         {
-            foreach(Sheep sheep in sheeps)
-            {
-                sheep.DoSomething();
-            }
-
-            sheeps[0].PassSheepsTurn();
-
+            this.moving = true;
+            StartCoroutine(SheepMoves());
         }
+    }
+
+    IEnumerator SheepMoves()
+    {
+        foreach (Sheep sheep in sheeps)
+        {
+            sheep.DoSomething();
+            yield return new WaitForEndOfFrame();
+        }
+
+        sheeps[0].PassSheepsTurn();
+        this.moving = false;
+
+        yield return null;
+
     }
 }
