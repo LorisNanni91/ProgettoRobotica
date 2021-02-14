@@ -20,10 +20,13 @@ public class Dog : MovableObjects
 
     private void Update()
     {
-        if(CanMove && !waitForIstrucition)
+        if (GameManager.Inizialized)
         {
-            waitForIstrucition = true;
-            StartCoroutine(DogTurn());
+            if (CanMove && !waitForIstrucition)
+            {
+                waitForIstrucition = true;
+                StartCoroutine(DogTurn());
+            }
         }
         
     }
@@ -31,32 +34,24 @@ public class Dog : MovableObjects
     private IEnumerator DogTurn()
     {
         // wait for unity updating sheeps
-        yield return new WaitForSeconds(1f);
-
-        //Debug.Log("Start coroutine dog, waiting " + waitForIstrucition);
-
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         this.dogSensorManager.UpdateSensor();
 
         // wait for unity updating sensors
-        yield return new WaitForSeconds(1f);
-
-        Debug.Log("DOG SENSOR: prima invio " + this.dogSensorManager.GetStringSensor());
+        yield return new WaitForSeconds(0.5f);
 
         GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, transform.position);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         GameManager.GameManagerInstance.SendSensorMessage(MessageType.DOG_SENSOR, this.dogSensorManager.GetStringSensor());
 
-        Debug.Log("DOG SENSOR: dopo invio " + this.dogSensorManager.GetStringSensor());
-
-        //yield return new WaitUntil(() => newIstructionArrived);
+        Debug.Log("DOG SENSOR:" + this.dogSensorManager.GetStringSensor());
 
         while(!newIstructionArrived)
         {
             //Debug.Log("dog waiting " + newIstructionArrived);
 
             newIstructionArrived = GameManager.GameManagerInstance.NewMessageToRead(this.istructions.Count);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
         }
 
         string istruction = GameManager.GameManagerInstance.GetDogIstructionMessage();
@@ -64,7 +59,7 @@ public class Dog : MovableObjects
 
         ExecuteIstruction(istruction);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         this.PassMyTurn();
 

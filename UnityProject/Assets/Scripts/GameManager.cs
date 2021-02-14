@@ -16,13 +16,16 @@ public class GameManager : MonoBehaviour
     Dog dog;
     [SerializeField]
     private MessageHandler connection;
+
+    private static bool _inizialized = false;
+
+    public static bool Inizialized
+    {
+        get => _inizialized;
+    }
     public static OBJECTSTYPE Turn
     {
-        get
-        {
-            return _turn;
-        }
-
+        get => _turn;
     }
 
     private static OBJECTSTYPE _turn;
@@ -41,10 +44,7 @@ public class GameManager : MonoBehaviour
 
     public Vector3 PlaneSize
     {
-        get
-        {
-            return plane.size;
-        }
+        get => plane.size;
     }
 
     private int _counterType = 0;
@@ -69,6 +69,9 @@ public class GameManager : MonoBehaviour
 
         connection.SendMessage(MessageType.DOG_POSITION, dog.transform.position);
         Debug.Log("DOG POSITION: " + plane.size);
+        yield return new WaitForSeconds(1f);
+
+        _inizialized = true;
 
         yield return null;
     }
