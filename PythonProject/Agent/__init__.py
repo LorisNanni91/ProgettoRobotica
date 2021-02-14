@@ -2,6 +2,7 @@ import Agent.Brain
 import Agent.Sensor
 
 CONST_QUERY_FACT_CLASS = "takeDecision(X)"
+FACT_GOAL_TRUE = "goal('True')"
 
 
 class Agent:
@@ -33,7 +34,7 @@ class Agent:
         if self.useBrain().useMemory().getGoalPosition() == None:
 
             self.useBrain().useMemory().setGoalPosition(position)
-            fact = "goal('True')"
+            fact = FACT_GOAL_TRUE
             self.useBrain().useMemory().putFact(fact)
             self.useBrain().useLearning().learnNewFact(fact)
 

@@ -1,4 +1,7 @@
 NOT_FOUND = 'Non trovata'
+SHEEP = 'SHEEP'
+TARGET = 'TARGET'
+EMPTY = 'EMPTY'
 
 from pyswip import Prolog
 import Agent.Brain.Behaviour
@@ -33,15 +36,15 @@ class Brain:
         if self.__memory.getGoalPosition() is not None:
             targetposition = self.useMemory().getTargetPosition()
 
-            if positionArray[4][2] == 'SHEEP':
+            if positionArray[4][2] == SHEEP:
                 targetposition = self.useMemory().calcolateTarget(positionArray[4])
 
             if targetposition is not None:
                 for i in range(len(positionArray)):
                     if int(positionArray[i][0]) == targetposition[0] \
                             and int(positionArray[i][1]) == targetposition[1]:
-                        if positionArray[i][2] == 'EMPTY':
-                            positionArray[i][2] = 'TARGET'
+                        if positionArray[i][2] == EMPTY:
+                            positionArray[i][2] = TARGET
                         break
 
         # compongo e imparo nuovo fatto
@@ -95,6 +98,9 @@ class Brain:
             elif decision == "Forward-Right":
                 ipoteticposition = self.__memory.calcolateIpoteticPositionFR( )
 
+            if decision.split("-")[0] != "Rotate" and self.useMemory().recentlyVisited(ipoteticposition):
+                continue
+
             if self.useMemory().getGoalPosition() != None:
                 # ho trovato il goal
                 targetposition = self.useMemory().getTargetPosition()
@@ -102,7 +108,7 @@ class Brain:
                 if decision.split ("-")[0] != "Rotate":
                     if targetposition == None:
                         # non ho un target, scelgo la decisione se mi avvicina alla pecora più vicina che ricordo
-                        elem = "SHEEP"
+                        elem = SHEEP
                         if not any(elem in x for x in positionArray):
                             if self.isConvenient(ipoteticposition, myposition):
                                 return decision
@@ -179,7 +185,7 @@ class Brain:
 
             for i in range(xmin, xmax + 1):
 
-                y = Brain.indexOf(self.__memory.getWorld()[i], 'SHEEP', ymin, ymax)
+                y = Brain.indexOf(self.__memory.getWorld()[i], SHEEP, ymin, ymax)
 
                 if y != NOT_FOUND:
                     sheepposition.append(i)

@@ -1,10 +1,12 @@
+FACT_GOAL_FALSE = "goal('False')"
+
 class Learning:
     __prolog = None
 
     def __init__(self, prolog):
         self.__prolog = prolog
         # all'inizio la classe goal vale false
-        self.learnNewFact("goal('False')", True)
+        self.learnNewFact(FACT_GOAL_FALSE, True)
 
     def learnNewFact(self, fact, initialized=False):
         if not initialized:  # se non sto inizializzando, devo svuotare il db prolog

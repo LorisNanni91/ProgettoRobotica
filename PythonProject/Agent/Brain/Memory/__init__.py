@@ -1,5 +1,7 @@
 NUM_LAST_POSITION = 3
 SOGLIA_MIN = 2
+EMPTY = 'EMPTY'
+SHEEP = 'SHEEP'
 
 import math
 
@@ -51,7 +53,7 @@ class Memory:
 
     def changeMyPosition(self, newposition):
         # metto a vuoto la cella del mondo corrispondente alla mia posizione
-        self.__world[self.__myposition[0]][self.__myposition[1]] = 'EMPTY'
+        self.__world[self.__myposition[0]][self.__myposition[1]] = EMPTY
 
         # se ho raggiunto le x posizioni da ricordare, devo rimuovere la più vecchia prima di inserire la nuova
         if len(self.__mylastpositions) == NUM_LAST_POSITION:
@@ -204,7 +206,7 @@ class Memory:
             if self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] == 0:
                 vettore = [int(arraySensor[i][0]), int(arraySensor[i][1])]
                 self.updateQuadranti(vettore)
-            if arraySensor[i][2] == 'SHEEP':
+            if arraySensor[i][2] == SHEEP:
                 self.__sheepviewed = True
             self.__world[int(arraySensor[i][0])][int(arraySensor[i][1])] = arraySensor[i][2]
         return
@@ -215,14 +217,15 @@ class Memory:
     def getSheepViewed(self):
         return self.__sheepviewed
 
-    # def recentlyVisited(self, ipoteticposition):
-    #
-    #     # controllo se la posizione dove voglio andare è tra quelle visitate di recente
-    #     for i in range(len(self.__mylastpositions)):
-    #         if int(ipoteticposition[0]) == self.__mylastpositions[i][0] and int(ipoteticposition[1]) == self.__mylastpositions[i][1]:
-    #             return True
-    #
-    #     return False
+    def recentlyVisited(self, ipoteticposition):
+
+        if len(self.__mylastpositions) > 0:
+            # controllo se la posizione dove voglio andare è tra quelle visitate di recente
+            for i in range(len(self.__mylastpositions)):
+                if int(ipoteticposition[0]) == self.__mylastpositions[i][0] and int(ipoteticposition[1]) == self.__mylastpositions[i][1]:
+                    return True
+
+        return False
 
     def calcolateTarget(self, sheepposition):
 
@@ -253,21 +256,24 @@ class Memory:
         print("calcolata prima t" + str(targetposition))
 
         # controllo se la posizione del target è accessibile, altrimenti devo ricalcolarla
-        if self.__world[targetposition[0]][targetposition[1]] == 'EMPTY':
+        if self.__world[targetposition[0]][targetposition[1]] == EMPTY:
             self.__targetposition = targetposition
         else:
             # calcolo le due posizioni adiacenti
+            firstPoss = None
+            secPoss = None
             if delta[0] == 0:
                 if Memory.isInRange(targetposition[1] + 1):
                     firstPoss = [targetposition[0], targetposition[1] + 1]
-
                 if Memory.isInRange(targetposition[1] - 1):
                     secPoss = [targetposition[0], targetposition[1] - 1]
+
             elif delta[1] == 0:
                 if Memory.isInRange(targetposition[0] + 1):
                     firstPoss = [targetposition[0] + 1, targetposition[1]]
                 if Memory.isInRange(targetposition[0] - 1):
                     secPoss = [targetposition[0] - 1, targetposition[1]]
+
             else:
                 if Memory.isInRange(targetposition[0] + delta[0]):
                     firstPoss = [targetposition[0] + delta[0], targetposition[1]]
@@ -278,19 +284,19 @@ class Memory:
             # print ("calcolata sec t" + str (secPoss))
 
             # controllo se le posizioni calcolate sono libere, altrimenti ritorno None
-            if self.__world[int(firstPoss[0])][int(firstPoss[1])] == 'EMPTY':
+            if firstPoss != None and self.__world[int(firstPoss[0])][int(firstPoss[1])] == EMPTY:
                 return firstPoss
-            elif self.__world[int(secPoss[0])][int(secPoss[1])] == 'EMPTY':
+            elif secPoss != None and self.__world[int(secPoss[0])][int(secPoss[1])] == EMPTY:
                 return secPoss
             else:
                 ipoteticposition = self.calcolateIpoteticPositionF()
-                if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == 'EMPTY':
+                if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == EMPTY:
                     return ipoteticposition
                 ipoteticposition = self.calcolateIpoteticPositionFL()
-                if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == 'EMPTY':
+                if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == EMPTY:
                     return ipoteticposition
                 ipoteticposition = self.calcolateIpoteticPositionFR()
-                if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == 'EMPTY':
+                if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == EMPTY:
                     return ipoteticposition
 
 
