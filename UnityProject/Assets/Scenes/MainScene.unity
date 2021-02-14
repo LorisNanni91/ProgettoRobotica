@@ -471,7 +471,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!65 &129246035
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5480,7 +5480,7 @@ PrefabInstance:
     - target: {fileID: 358804573295708960, guid: 289debb1d8437754d9a3b33c87faa178,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 358804573295708960, guid: 289debb1d8437754d9a3b33c87faa178,
         type: 3}
@@ -5554,7 +5554,7 @@ PrefabInstance:
     - target: {fileID: 6418377207737854401, guid: 13b9c478bbb327e47949e3ab5816a168,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6418377207737854401, guid: 13b9c478bbb327e47949e3ab5816a168,
         type: 3}
