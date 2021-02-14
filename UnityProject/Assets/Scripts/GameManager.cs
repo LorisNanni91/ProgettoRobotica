@@ -109,7 +109,8 @@ public class GameManager : MonoBehaviour
 
     public static Vector3 IgnoreYofVector(Vector3 a)
     {
-        return Vector3.Scale(a, new Vector3(1, 0, 1));
+        Vector3 vector3 = new Vector3(Mathf.RoundToInt(a.x), 0, Mathf.RoundToInt(a.z));
+        return vector3;
     }
 
 

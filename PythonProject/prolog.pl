@@ -55,11 +55,11 @@ takeDecision('Forward-Right') :- lineSensorH1('Sensor 1,3', 'EMPTY'), lineSensor
                                  lineSensorH1('Sensor 1,3', 'EMPTY'), lineSensorH2('Sensor 2,2', 'TARGET'), lineSensorH2('Sensor 2,1', 'SHEEP'),!;
                                  lineSensorH1('Sensor 1,3', 'EMPTY'), lineSensorH3('Sensor 3,2', 'TARGET'), lineSensorH2('Sensor 2,1', 'SHEEP'),!.
 
-takeDecision('Left') :- lateralSensor('Sensor Left', 'EMPTY'), lineSensorH2('Sensor 2,1', 'SHEEP'), goal('True'),\+ lineSensorH2('Sensor 2,2', 'SHEEP'),!;
+takeDecision('Left') :- lateralSensor('Sensor Left', 'EMPTY'), lineSensorH2('Sensor 2,1', 'SHEEP'), goal('True'),\+ lineSensorH2('Sensor 2,2', 'SHEEP'), \+ lineSensor(_,'TARGET'),!;
                         lateralSensor('Sensor Left', 'EMPTY'), lineSensorH2('Sensor 2,2', 'SHEEP'), lineSensorH2('Sensor 2,1', 'TARGET'),!;
                         lateralSensor('Sensor Left', 'EMPTY'), lineSensorH2('Sensor 2,2', 'SHEEP'), lineSensorH3('Sensor 3,1', 'TARGET'),!.
 
-takeDecision('Right') :- lateralSensor('Sensor Right', 'EMPTY'), lineSensorH2('Sensor 2,3', 'SHEEP'), goal('True'),\+ lineSensorH2('Sensor 2,2', 'SHEEP'), !;
+takeDecision('Right') :- lateralSensor('Sensor Right', 'EMPTY'), lineSensorH2('Sensor 2,3', 'SHEEP'), goal('True'),\+ lineSensorH2('Sensor 2,2', 'SHEEP'),  \+ lineSensor(_,'TARGET')!;
                          lateralSensor('Sensor Right', 'EMPTY'), lineSensorH2('Sensor 2,2', 'SHEEP'), lineSensorH2('Sensor 2,3', 'TARGET'),!;
                          lateralSensor('Sensor Right', 'EMPTY'), lineSensorH2('Sensor 2,2', 'SHEEP'), lineSensorH3('Sensor 3,3', 'TARGET'),!.
 

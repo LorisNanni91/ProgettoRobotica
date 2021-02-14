@@ -35,10 +35,12 @@ public class Dog : MovableObjects
     {
         // wait for unity updating sheeps
         yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForEndOfFrame();
         this.dogSensorManager.UpdateSensor();
 
         // wait for unity updating sensors
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
+        yield return new WaitForEndOfFrame();
 
         GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, transform.position);
         yield return new WaitForSeconds(0.5f);
@@ -60,6 +62,7 @@ public class Dog : MovableObjects
         ExecuteIstruction(istruction);
 
         yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForEndOfFrame();
 
         this.PassMyTurn();
 

@@ -19,35 +19,33 @@ public class SheepSensor : Sensor
     }
 
     #region UnityMethod
-    /*
+    
     private void OnTriggerEnter(Collider other)
     {
-
-        Objects obstalce = other.GetComponent<Objects>();
-
-        if (obstalce != null)
-        {
-            this.obstacles.Add(obstalce);
-
-            if (obstalce.type == OBJECTSTYPE.DOG)
-            {
-                RunAwayFromDog(obstalce);
-            }
-
-        }
-
-
+        UpdateSensor(other);
     }
-    */
+    
 
     private void OnTriggerStay(Collider other)
     {
+        UpdateSensor(other);
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        Objects obstacle = other.GetComponent<Objects>();
+        this.obstacles.Remove(obstacle);
+    }
+
+    #endregion
+
+    private void UpdateSensor(Collider other)
+    {
         Objects obstalce = other.GetComponent<Objects>();
 
         if (obstalce != null)
         {
-            if(!this.obstacles.Contains(obstalce) && obstalce.type != OBJECTSTYPE.GOAL)
+            if (!this.obstacles.Contains(obstalce) && obstalce.type != OBJECTSTYPE.GOAL)
             {
                 this.obstacles.Add(obstalce);
                 // need to recalculate next position
@@ -62,16 +60,7 @@ public class SheepSensor : Sensor
 
         }
 
-
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        Objects obstacle = other.GetComponent<Objects>();
-        this.obstacles.Remove(obstacle);
-    }
-
-    #endregion
 
     private void RunAwayFromDog(Objects dog)
     {
@@ -183,7 +172,7 @@ public class SheepSensor : Sensor
         if(nextPosition!=null)
         {
             float previousY = transform.parent.position.y;
-            this.nextPosition = nextPosition;
+            this.nextPosition = new Vector3(Mathf.RoundToInt(nextPosition.x), 0, Mathf.RoundToInt(nextPosition.z));
             this.nextPosition.y = previousY;
         }
         else

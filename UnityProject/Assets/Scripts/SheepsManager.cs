@@ -77,16 +77,18 @@ public class SheepsManager : MonoBehaviour
 
     IEnumerator SheepMoves()
     {
+        // delay for update sensors
+        yield return new WaitForSeconds(0.5f);
+
         foreach (Sheep sheep in sheeps)
         {
             sheep.DoSomething();
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.2f);
         }
+
 
         sheeps[0].PassSheepsTurn();
         this.moving = false;
-
-        yield return null;
 
     }
 }
