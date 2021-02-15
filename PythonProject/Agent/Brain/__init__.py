@@ -139,6 +139,17 @@ class Brain:
                         return decision
 
         # nessuna scelta sembra essere valida, scegliamo a caso
+        if self.useMemory().getLastDecision().split("-")[0] == "Rotate":
+
+            lenght = len(arraydecision)-1
+            i=0
+            while i< lenght:
+                if arraydecision[i].split("-")[0] == "Rotate":
+                    arraydecision.pop(i)
+                    lenght-=1
+                    continue
+                i+=1
+
         return arraydecision[random.randint(0, len(arraydecision) - 1)]
 
     def isConvenient(self, ipoteticposition, myposition, targetposition=None):

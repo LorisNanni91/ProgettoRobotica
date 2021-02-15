@@ -58,9 +58,9 @@ takeDecision('Forward-Right') :- lineSensor('Sensor 1,3', 'EMPTY'), lineSensor('
                                  lineSensor('Sensor 1,3', 'EMPTY'), lineSensor('Sensor 2,2', 'TARGET'), lineSensor('Sensor 2,1', 'SHEEP'),!;
                                  lineSensor('Sensor 1,3', 'EMPTY'), lineSensor('Sensor 3,2', 'TARGET'), lineSensor('Sensor 2,1', 'SHEEP'),!;
                                  \+ lateralSensor('Sensor Right', 'EMPTY'), lineSensor('Sensor 1,3', 'EMPTY'), lineSensor('Sensor 2,2', 'SHEEP'), lineSensor('Sensor 2,1', 'TARGET'),!;
-                                \+ lateralSensor('Sensor Right', 'EMPTY'), lineSensor('Sensor 1,3', 'EMPTY'), lineSensor('Sensor 2,2', 'SHEEP'), lineSensor(_, 'TARGET'),!;
-                                lineSensor('Sensor 1,3', 'EMPTY'), \+ lineSensor('Sensor 1,2', 'EMPTY'), lineSensor('Sensor 2,2', 'TARGET'), \+ lineSensorH1(_, 'SHEEP'),!;
-                                lineSensor('Sensor 1,3', 'EMPTY'), lineSensor('Sensor 2,1', 'SHEEP'), lineSensor('Sensor 3,1', 'TARGET'), !.
+                                 \+ lateralSensor('Sensor Right', 'EMPTY'), lineSensor('Sensor 1,3', 'EMPTY'), lineSensor('Sensor 2,2', 'SHEEP'), lineSensor(_, 'TARGET'),!;
+                                 lineSensor('Sensor 1,3', 'EMPTY'), \+ lineSensor('Sensor 1,2', 'EMPTY'), lineSensor('Sensor 2,2', 'TARGET'), \+ lineSensorH1(_, 'SHEEP'),!;
+                                 lineSensor('Sensor 1,3', 'EMPTY'), lineSensor('Sensor 2,1', 'SHEEP'), lineSensor('Sensor 3,1', 'TARGET'), !.
 
 takeDecision('Left') :- lateralSensor('Sensor Left', 'EMPTY'), lineSensor('Sensor 2,1', 'SHEEP'), goal('True'),\+ lineSensor('Sensor 2,2', 'SHEEP'), \+ lineSensor(_,'TARGET'),!;
                         lateralSensor('Sensor Left', 'EMPTY'), lineSensor(_, 'SHEEP'), lineSensor('Sensor 2,1', 'TARGET'),!;
@@ -72,9 +72,9 @@ takeDecision('Right') :- lateralSensor('Sensor Right', 'EMPTY'), lineSensor('Sen
 
 
 
-takeDecision('Rotate-Left') :- \+ lineSensorV1(_, 'WALL'), \+ lineSensor(_, 'TARGET').
-takeDecision('Rotate-Right') :- \+ lineSensorV3(_, 'WALL'), \+ lineSensor(_, 'TARGET').
-takeDecision('Rotate-Back') :- \+ lineSensor(_, 'SHEEP'), \+ lineSensor(_, 'TARGET').
+takeDecision('Rotate-Left') :- \+ lineSensorV1(_, 'WALL'), \+ lineSensor(_, 'TARGET'), \+ lineSensor(_, 'SHEEP').
+takeDecision('Rotate-Right') :- \+ lineSensorV3(_, 'WALL'), \+ lineSensor(_, 'TARGET'),\+ lineSensor(_, 'SHEEP').
+takeDecision('Rotate-Back') :- \+ lineSensor(_, 'SHEEP'), \+ lineSensor(_, 'TARGET'),\+ lineSensor(_, 'SHEEP').
 
 takeDecision('Forward') :- lineSensor('Sensor 1,2', 'EMPTY'), lineSensor('Sensor 3,2', 'TARGET');
                            lineSensor('Sensor 1,2', 'EMPTY').

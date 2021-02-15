@@ -258,6 +258,7 @@ class Memory:
         # controllo se la posizione del target è accessibile, altrimenti devo ricalcolarla
         if self.__world[targetposition[0]][targetposition[1]] == EMPTY:
             self.__targetposition = targetposition
+            return targetposition
         else:
             # calcolo le due posizioni adiacenti
             firstPoss = None
@@ -285,23 +286,24 @@ class Memory:
 
             # controllo se le posizioni calcolate sono libere, altrimenti ritorno None
             if firstPoss != None and self.__world[int(firstPoss[0])][int(firstPoss[1])] == EMPTY:
+                self.__targetposition = firstPoss
                 return firstPoss
             elif secPoss != None and self.__world[int(secPoss[0])][int(secPoss[1])] == EMPTY:
+                self.__targetposition = secPoss
                 return secPoss
             else:
                 ipoteticposition = self.calcolateIpoteticPositionF()
                 if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == EMPTY:
+                    self.__targetposition = ipoteticposition
                     return ipoteticposition
                 ipoteticposition = self.calcolateIpoteticPositionFL()
                 if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == EMPTY:
+                    self.__targetposition = ipoteticposition
                     return ipoteticposition
                 ipoteticposition = self.calcolateIpoteticPositionFR()
                 if self.__world[int(ipoteticposition[0])][int(ipoteticposition[1])] == EMPTY:
+                    self.__targetposition = ipoteticposition
                     return ipoteticposition
-
-
-
-        return self.__targetposition
 
     def calcolateIpoteticPositionF(self):
         newposition = []
