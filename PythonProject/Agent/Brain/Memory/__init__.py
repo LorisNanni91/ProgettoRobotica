@@ -248,8 +248,8 @@ class Memory:
         elif deltay == 0:
             delta.append(0)
 
-        targetpositionx = (int(sheepposition[0]) + delta[0]) if (int(sheepposition[0]) + delta[0]) < self.__planedim[0] else int(sheepposition[0])
-        targetpositiony = (int(sheepposition[1]) + delta[1]) if (int(sheepposition[1]) + delta[1]) < self.__planedim[1] else int(sheepposition[1])
+        targetpositionx = (int(sheepposition[0]) + delta[0]) if (int(sheepposition[0]) + delta[0]) >= 0 and (int(sheepposition[0]) + delta[0]) < self.__planedim[0] else int(sheepposition[0])
+        targetpositiony = (int(sheepposition[1]) + delta[1]) if (int(sheepposition[1]) + delta[1]) >= 0 and (int(sheepposition[1]) + delta[1]) < self.__planedim[1] else int(sheepposition[1])
         targetposition = [int(targetpositionx), int(targetpositiony)]
 
         print('posizione pecora ' + str(sheepposition))

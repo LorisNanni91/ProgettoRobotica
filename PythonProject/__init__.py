@@ -1,6 +1,8 @@
 import server as S
 import Agent
 
+NUM_SHEEP = 3
+
 #Message type separators
 TYPE_SEPARATOR = "|"
 INTERNAL_SEPARATOR = ","
@@ -42,11 +44,11 @@ cane = Agent.Agent(dogposition, planedimension)
 
 
 i = 0
-while i < 5:
+while i < NUM_SHEEP:
 
     data = S.sock.ReadReceivedData()  # read data
     if data != None:
-        # print(data)
+        print(data)
         array = data.split(TYPE_SEPARATOR)
         if array[0] == DOG_SENSOR:
             decision = cane.reaction(array[1])
@@ -65,4 +67,4 @@ while i < 5:
         elif array[0] == DOG_POSITION:
             cane.useBrain().useMemory().changeMyPosition(array[1].split(INTERNAL_SEPARATOR))
 
-print("Congratulazioni! La simulazione è terminata in " + moveCounter + " mosse.")
+print("Congratulazioni! La simulazione è terminata in " + int(moveCounter) + " mosse.")

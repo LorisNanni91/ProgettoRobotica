@@ -40,12 +40,16 @@ public class Dog : MovableObjects
 
         // wait for unity updating sensors
         //yield return new WaitForSeconds(0.5f);
-        yield return new WaitForEndOfFrame();
+        //yield return new WaitForEndOfFrame();
 
-        GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, transform.position);
+        Vector3 dogPosition = new Vector3(Mathf.RoundToInt(transform.position.x), 0, Mathf.RoundToInt(transform.position.z));
+
+        yield return new WaitForSeconds(0.5f);
+        GameManager.GameManagerInstance.SendPositionMessage(MessageType.DOG_POSITION, dogPosition);
         yield return new WaitForSeconds(0.5f);
         GameManager.GameManagerInstance.SendSensorMessage(MessageType.DOG_SENSOR, this.dogSensorManager.GetStringSensor());
 
+        Debug.Log("DOG POSITION:" + dogPosition);
         Debug.Log("DOG SENSOR:" + this.dogSensorManager.GetStringSensor());
 
         while(!newIstructionArrived)

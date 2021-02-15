@@ -2,6 +2,7 @@ NOT_FOUND = 'Non trovata'
 SHEEP = 'SHEEP'
 TARGET = 'TARGET'
 EMPTY = 'EMPTY'
+OBSTACLE = "OBSTACLE"
 
 from pyswip import Prolog
 import Agent.Brain.Behaviour
@@ -36,14 +37,14 @@ class Brain:
         if self.__memory.getGoalPosition() is not None:
             targetposition = self.useMemory().getTargetPosition()
 
-            if positionArray[4][2] == SHEEP:
+            if positionArray[4][2] == SHEEP and targetposition == None:
                 targetposition = self.useMemory().calcolateTarget(positionArray[4])
 
             if targetposition is not None:
                 for i in range(len(positionArray)):
                     if int(positionArray[i][0]) == targetposition[0] \
                             and int(positionArray[i][1]) == targetposition[1]:
-                        if positionArray[i][2] == EMPTY:
+                        if positionArray[i][2] != OBSTACLE:
                             positionArray[i][2] = TARGET
                         break
 
@@ -55,10 +56,11 @@ class Brain:
         # consulto il prolog
         decisionarray = self.__behaviour.takeDecision(factClass)
 
-        if decisionarray != "Error":
+        if decisionarray != False:
 
             # se ho più di una decisione, valuto quale restituire
             if len(decisionarray) > 1:
+
                 decision = self.evaluateDecision(positionArray, decisionarray)
                 print("questa sono le decisioni " + str(decisionarray) + "e questa è quella scelta " + decision)
 
@@ -114,7 +116,7 @@ class Brain:
                                 return decision
                     else:
                         # ho un target, scelgo la decisione se mi avvicina al target
-                        elem = "TARGET"
+                        elem = TARGET
                         if not any(elem in x for x in positionArray):
                             if self.isConvenient(ipoteticposition, myposition, targetposition):
                                 return decision
@@ -135,12 +137,6 @@ class Brain:
 
                     elif self.useMemory().nearInesplorate(ipoteticposition):
                         return decision
-
-                    # if self.useMemory().getQuadrante()[indicequadrante]
-                    # # if self.isConvenient(ipoteticposition, myposition, self.useMemory().getQuadrante(ipoteticposition))
-                    # if not self.__memory.recentlyVisited(ipoteticposition):
-                    #     # if self.__memory.getWorld()[ipoteticposition[0]][ipoteticposition[1]] != 'V':
-                    #     return decision
 
         # nessuna scelta sembra essere valida, scegliamo a caso
         return arraydecision[random.randint(0, len(arraydecision) - 1)]
@@ -206,6 +202,13 @@ class Brain:
                 return i
 
         return NOT_FOUND
+
+    @staticmethod
+    def searchElement(list, element):
+        for i in range(0, len(list)-1):
+            if list[i][2] == element:
+                return True
+        return False
 
     @staticmethod
     def composeFact(positionArray):

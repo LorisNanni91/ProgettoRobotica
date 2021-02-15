@@ -5432,7 +5432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0125369f9b6f6c4bb6e9b1f0d2cc99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfSheeps: 5
+  numberOfSheeps: 3
   prefabSheep: {fileID: 126824983268931578, guid: 86c62ae33d3debd40a302f420d7465a3,
     type: 3}
 --- !u!1001 &2415073614463778811
