@@ -15,7 +15,7 @@ https://github.com/Siliconifier/Python-Unity-Socket-Communication
 
 <h1>Dependencies</h1>
 
-Install Swi-Prolog, you can find ad this link: <br>
+Install Swi-Prolog, you can find at this link: <br>
 https://www.swi-prolog.org/Download.html
 
 I used Swi-Prolog with 64 bit architecture version, but if you have Python 32 bit, you have to install Swi-Prolog 32 bit.
@@ -27,3 +27,9 @@ After you need to install pyswip, use the command:
 ```markdown
 pip3 install pyswip
 ```
+
+For lanch the simulation, keep open Unity ad Python project (I used pycharm, but i have tried on vs code and works fine on there too), then start the main.py
+After start on Unity clicking play on editor. The simulation start when both program are running.
+
+![alt text](https://github.com/LorisNanni91/ProgettoRobotica/blob/master/python.gif?raw=true)
+![alt text](https://github.com/LorisNanni91/ProgettoRobotica/blob/master/unity.gif?raw=true)
