@@ -29,7 +29,7 @@ pip3 install pyswip
 ```
 <h1>Starting the simulation</h1>
 
-For lanch the simulation, keep open Unity ad Python project (I used pycharm, but i have tried on vs code and works fine on there too), then start the main.py
+For launch the simulation, keep open Unity ad Python project (I used pycharm, but i have tried on vs code and works fine on there too), then start the main.py
 After start on Unity clicking play on editor. The simulation start when both program are running.
 
 ![alt text](https://github.com/LorisNanni91/ProgettoRobotica/blob/master/python.gif?raw=true)
