@@ -20,7 +20,7 @@ https://www.swi-prolog.org/Download.html
 
 I used Swi-Prolog with 64 bit architecture version, but if you have Python 32 bit, you have to install Swi-Prolog 32 bit.
 
-Then configure your python enviroment with the file __main__.py as main script for running in your IDE.
+Then configure your python enviroment with the file \__main__.py as main script for running in your IDE.
 
 After you need to install pyswip, use the command:
 
@@ -30,7 +30,7 @@ pip3 install pyswip
 <h1>Starting the simulation</h1>
 
 For launch the simulation, keep open Unity ad Python project (I used pycharm, but i have tried on vs code and works fine on there too), then start the main.py
-After start on Unity clicking play on editor. The simulation start when both program are running.
+After start on Unity clicking play on editor. Is very important to start always **FIRST** Python and **AFTER** Unity. The simulation start when both program are running.
 
 ![alt text](https://github.com/LorisNanni91/ProgettoRobotica/blob/master/python.gif?raw=true)
 ![alt text](https://github.com/LorisNanni91/ProgettoRobotica/blob/master/unity.gif?raw=true)
